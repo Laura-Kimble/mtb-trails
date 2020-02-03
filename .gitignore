@@ -4,5 +4,3 @@
 *.npy
 *.pkl
 *.ipynb_checkpoints
-/data
-/models
