@@ -52,19 +52,19 @@ if __name__ == '__main__':
     
     trails_df = pd.read_pickle('../data/mtb_trails_df_2')
     trails_df_with_summary = trails_df[trails_df['no_summary']==0]
-    X = trails_df_with_summary['summary'][:100]
+    X = trails_df_with_summary['summary']
 
     nltk_stopwords = set(stopwords.words('english'))
     gensim_stopwords = STOPWORDS
     my_stopwords = set(['trail', 'ride', 'area', 'route', 'way', 'feature', 'section', 'ride', 'riding'\
-                    'north', 'south', 'east', 'west'])
+                    'north', 'south', 'east', 'west', '-PRON-', 'nee', 'regard', 'shall', 'use', 'win'])
     all_stopwords = my_stopwords.union(nltk_stopwords.union(gensim_stopwords))
 
     tf_vect = make_count_vectorizer(X, max_df=0.9, min_df=2, max_features=1000, stop_words=all_stopwords, ngram_range=(1, 1))
     tf = transform_vectorizer(tf_vect, X)
     top_words = get_top_words(tf_vect, tf, n=50)
 
-    num_topics = 5
+    num_topics = 10
     lda = LatentDirichletAllocation(n_components=num_topics, learning_method='online', n_jobs=-1, doc_topic_prior=None, topic_word_prior=None)
     lda.fit(tf)
 
@@ -73,8 +73,8 @@ if __name__ == '__main__':
     # Dump and reload
     joblib.dump(lda, 'lda_model.joblib')
     joblib.dump(tf_vect, 'tf_vec.joblib')
-    lda = joblib.load('lda_model.joblib')
-    tf_vectorizer = joblib.load('tf_vec.joblib')
+    # lda = joblib.load('lda_model.joblib')
+    # tf_vectorizer = joblib.load('tf_vec.joblib')
     
 
 
