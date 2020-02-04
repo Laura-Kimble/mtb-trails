@@ -12,14 +12,19 @@ from sklearn.metrics.pairwise import cosine_distances
 import spacy
 
 
-def make_count_vectorizer(contents, max_df=1.0, min_df=1, max_features=1000, stop_words='english', ngram_range=(1, 1)):
+def make_count_vectorizer(contents, lemmatize=False, max_df=1.0, min_df=1, max_features=1000, stop_words='english', ngram_range=(1, 1)):
 
     def tokenize(text):
         sp = spacy.load('en')
         lems = [word.lemma_ for word in sp(text) if word.pos_ not in ['PUNCT', 'PART', 'DET']]
         return lems
 
-    vectorizer_model = CountVectorizer(max_df=max_df, tokenizer=tokenize, min_df=min_df, max_features=max_features, stop_words=stop_words, ngram_range=ngram_range)
+    if lemmatize:
+        tokenizer = tokenize
+    else:
+        tokenizer=None
+
+    vectorizer_model = CountVectorizer(max_df=max_df, tokenizer=tokenizer, min_df=min_df, max_features=max_features, stop_words=stop_words, ngram_range=ngram_range)
     vectorizer_model.fit(contents)
     return vectorizer_model
 
@@ -50,33 +55,45 @@ def print_topic_words(lda_model, vectorizer_model, n=10):
 
 if __name__ == '__main__':
     
+    # Get trail summary data
     trails_df = pd.read_pickle('../data/mtb_trails_df_2')
     trails_df_with_summary = trails_df[trails_df['no_summary']==0]
     X = trails_df_with_summary['summary']
 
+    # Update stopwords
     nltk_stopwords = set(stopwords.words('english'))
     gensim_stopwords = STOPWORDS
-    my_stopwords = set(['trail', 'ride', 'area', 'route', 'way', 'feature', 'section', 'ride', 'riding'\
-                    'north', 'south', 'east', 'west', '-PRON-', 'nee', 'regard', 'shall', 'use', 'win'])
+    my_stopwords = set(['singletrack', 'loop', 'trail', 'trails',  'ride', 'area', 'route', 'way', 'feature', 'section', 'riding'\
+                    'north', 'south', 'east', 'west', '-PRON-', 'pron', 'nee', 'regard', 'shall', 'use', 'win'])
     all_stopwords = my_stopwords.union(nltk_stopwords.union(gensim_stopwords))
 
-    tf_vect = make_count_vectorizer(X, max_df=0.9, min_df=2, max_features=1000, stop_words=all_stopwords, ngram_range=(1, 1))
+    # Create TF matrix
+    tf_vect = make_count_vectorizer(X, lemmatize=False, max_df=0.8, min_df=2, max_features=1000, stop_words=all_stopwords, ngram_range=(1, 1))
     tf = transform_vectorizer(tf_vect, X)
     top_words = get_top_words(tf_vect, tf, n=50)
 
-    num_topics = 10
-    lda = LatentDirichletAllocation(n_components=num_topics, learning_method='online', n_jobs=-1, doc_topic_prior=None, topic_word_prior=None)
+    # LDA
+    num_topics = 2
+    lda = LatentDirichletAllocation(n_components=num_topics, learning_method='online', n_jobs=-1, doc_topic_prior=0.9, topic_word_prior=0.9, random_state=64)
     lda.fit(tf)
 
     print_topic_words(lda, tf_vect, n=10)
+    print("Model perplexity: {0:0.3f}".format(lda.perplexity(tf)))
+
+
 
     # Dump and reload
-    joblib.dump(lda, 'lda_model.joblib')
-    joblib.dump(tf_vect, 'tf_vec.joblib')
+    # joblib.dump(lda, 'lda_model.joblib')
+    # joblib.dump(tf_vect, 'tf_vec.joblib')
     # lda = joblib.load('lda_model.joblib')
     # tf_vectorizer = joblib.load('tf_vec.joblib')
     
 
 
     # PCA w/ 2 dimensions to visualize?
+    # num topics
     # n-grams
+    # NMF
+    # doc priors
+    # gensim viz
+    # scoring
