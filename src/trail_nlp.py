@@ -73,12 +73,12 @@ if __name__ == '__main__':
     all_stopwords = my_stopwords.union(nltk_stopwords.union(gensim_stopwords))
 
     # Create TF matrix
-    tf_vect = make_vectorizer(X, tf_idf=False, lemmatize=False, max_df=0.8, min_df=2, max_features=1000, stop_words=all_stopwords, ngram_range=(1, 1))
+    tf_vect = make_vectorizer(X, tf_idf=False, lemmatize=True, max_df=0.8, min_df=2, max_features=1000, stop_words=all_stopwords, ngram_range=(1, 1))
     tf = transform_vectorizer(tf_vect, X)
     top_words = get_top_words(tf_vect, tf, n=50)
 
     # LDA
-    num_topics = 2
+    num_topics = 3
     lda = LatentDirichletAllocation(n_components=num_topics, learning_method='online', n_jobs=-1, doc_topic_prior=0.9, topic_word_prior=0.9, random_state=64)
     lda.fit(tf)
 
@@ -86,10 +86,10 @@ if __name__ == '__main__':
     print("Model perplexity: {0:0.3f}".format(lda.perplexity(tf)))
 
     # PCA
-    tfidf_vect = make_vectorizer(X, tf_idf=True, lemmatize=False, max_df=0.8, min_df=2, max_features=1000, stop_words=all_stopwords, ngram_range=(1, 1))
-    tfidf = transform_vectorizer(tfidf_vect, X)
-    pca = PCA(n_components=2)
-    pca_tfidf = pca.fit_transform(tfidf.toarray())
+    # tfidf_vect = make_vectorizer(X, tf_idf=True, lemmatize=False, max_df=0.8, min_df=2, max_features=1000, stop_words=all_stopwords, ngram_range=(1, 1))
+    # tfidf = transform_vectorizer(tfidf_vect, X)
+    # pca = PCA(n_components=2)
+    # pca_tfidf = pca.fit_transform(tfidf.toarray())
 
 
 
