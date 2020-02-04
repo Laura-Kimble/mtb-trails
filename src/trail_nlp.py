@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd 
 import string
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from sklearn.decomposition import LatentDirichletAllocation
+from sklearn.decomposition import LatentDirichletAllocation, PCA
 from gensim.utils import simple_preprocess
 from gensim.parsing.preprocessing import STOPWORDS
 from nltk.corpus import stopwords
@@ -12,8 +12,13 @@ from sklearn.metrics.pairwise import cosine_distances
 import spacy
 
 
-def make_count_vectorizer(contents, lemmatize=False, max_df=1.0, min_df=1, max_features=1000, stop_words='english', ngram_range=(1, 1)):
+def make_vectorizer(contents, tf_idf=False, lemmatize=False, **kwargs):
 
+    if tf_idf:
+        Vectorizer = TfidfVectorizer
+    else:
+        Vectorizer = CountVectorizer
+    
     def tokenize(text):
         sp = spacy.load('en')
         lems = [word.lemma_ for word in sp(text) if word.pos_ not in ['PUNCT', 'PART', 'DET']]
@@ -24,7 +29,7 @@ def make_count_vectorizer(contents, lemmatize=False, max_df=1.0, min_df=1, max_f
     else:
         tokenizer=None
 
-    vectorizer_model = CountVectorizer(max_df=max_df, tokenizer=tokenizer, min_df=min_df, max_features=max_features, stop_words=stop_words, ngram_range=ngram_range)
+    vectorizer_model = Vectorizer(tokenizer=tokenizer, **kwargs)
     vectorizer_model.fit(contents)
     return vectorizer_model
 
@@ -68,7 +73,7 @@ if __name__ == '__main__':
     all_stopwords = my_stopwords.union(nltk_stopwords.union(gensim_stopwords))
 
     # Create TF matrix
-    tf_vect = make_count_vectorizer(X, lemmatize=False, max_df=0.8, min_df=2, max_features=1000, stop_words=all_stopwords, ngram_range=(1, 1))
+    tf_vect = make_vectorizer(X, tf_idf=False, lemmatize=False, max_df=0.8, min_df=2, max_features=1000, stop_words=all_stopwords, ngram_range=(1, 1))
     tf = transform_vectorizer(tf_vect, X)
     top_words = get_top_words(tf_vect, tf, n=50)
 
@@ -79,6 +84,13 @@ if __name__ == '__main__':
 
     print_topic_words(lda, tf_vect, n=10)
     print("Model perplexity: {0:0.3f}".format(lda.perplexity(tf)))
+
+    # PCA
+    tfidf_vect = make_vectorizer(X, tf_idf=True, lemmatize=False, max_df=0.8, min_df=2, max_features=1000, stop_words=all_stopwords, ngram_range=(1, 1))
+    tfidf = transform_vectorizer(tfidf_vect, X)
+    pca = PCA(n_components=2)
+    pca_tfidf = pca.fit_transform(tfidf.toarray())
+
 
 
 
