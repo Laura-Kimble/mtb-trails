@@ -1,23 +1,21 @@
 import numpy as np 
 import pandas as pd 
-import string
-
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from sklearn.decomposition import LatentDirichletAllocation, PCA
-from sklearn.metrics.pairwise import cosine_distances
-
 import gensim
 import gensim.corpora as corpora
 from gensim.utils import simple_preprocess
 from gensim.parsing.preprocessing import STOPWORDS
 from gensim.models import CoherenceModel, Phrases
 from gensim.models.phrases import Phraser
-
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
-
 from pprint import pprint
+
+
+def get_st_descriptions():
+    st_df = pd.read_pickle('../data/st_trails_df_2')
+    st_df_with_desc = st_df[st_df['description_length']>=40]
+    return st_df_with_desc['description']
 
 
 def featurize_text(documents, first_stopwords, second_stopwords, bigrams=True, trigrams=True):
@@ -38,7 +36,7 @@ def featurize_text(documents, first_stopwords, second_stopwords, bigrams=True, t
             new_tokens = bigrams
     else:
         new_tokens = tokens_nostops
-]
+
     # lemmatize and remove stopwords again
     processed_docs = new_tokens.apply(preprocess, args=(second_stopwords, ))
     return processed_docs
@@ -108,9 +106,7 @@ def get_perplexity_coherence(lda_model, bow_corpus, processed_docs, id2word, coh
 if __name__ == '__main__':
     
     # Get singltracks trail summary data
-    st_df = pd.read_pickle('../data/st_trails_df_2')
-    st_df_with_desc = st_df[st_df['description_length']>=40]
-    X = st_df_with_desc['description']
+    X = get_st_descriptions()
 
     # Create initial stopwords to remove before creating n-grams
     not_stops_firstpass = ['not', 'bottom', 'few', 'many', 'more', 'less', 'most', 'least', 'never', 'off', 'out'\

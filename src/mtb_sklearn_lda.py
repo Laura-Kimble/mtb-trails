@@ -91,21 +91,8 @@ if __name__ == '__main__':
     # pca = PCA(n_components=2)
     # pca_tfidf = pca.fit_transform(tfidf.toarray())
 
-
-
-
     # Dump and reload
     # joblib.dump(lda, 'lda_model.joblib')
     # joblib.dump(tf_vect, 'tf_vec.joblib')
     # lda = joblib.load('lda_model.joblib')
     # tf_vectorizer = joblib.load('tf_vec.joblib')
-    
-
-
-    # PCA w/ 2 dimensions to visualize?
-    # num topics
-    # n-grams
-    # NMF
-    # doc priors
-    # gensim viz
-    # scoring

@@ -127,6 +127,110 @@ Singletracks descriptions LDA, 10 topics, not lemmatized, no n-grams.
     Model perplexity: 806.284
 
 
+Singletracks LDA with gensim -- spread out, but topics don't make sense.
+
+
+
+Singletrack NMF with sklearn: 6 topics, stopwords, 2-grams, no lemmatization:
+
+    Topic 0:
+    ['ridge' 'steep' 'river' 'canyon' 'end' 'old' 'll' 'climbs' 'rd' 'gravel']
+    Topic 1:
+    ['creek' 'crossings' 'creek crossings' 'fisher' 'bear creek' 'lower'
+    'bear' 'gulch' 'steep' 'portion']
+    Topic 2:
+    ['provincial' 'hiking' 'swimming' 'fishing' 'lake' 'acres' 'acre'
+    'camping' 'activities' 'permitted']
+    Topic 3:
+    ['beginner' 'intermediate' 'features' 'technical' 'advanced' 'loops'
+    'open' 'jumps' 'country' 'hills']
+    Topic 4:
+    ['lots' 'roots' 'rocks' 'climbs' 'pretty' 'technical' 'challenging'
+    'network' 'tough' 'lake']
+    Topic 5:
+    ['fun' 'little' 'bit' 'little bit' 'easy' 'hard' 'people' 'quick' 'built'
+    'pretty']
+
+
+Top Trails in each topic:
+
+    Topic 0:
+    Golden Gate Canyon State Park: Colorado
+    Coopers Rock: West Virginia
+    West Bench Trail: Colorado
+    Bear Creek Lake Park: Colorado
+    Hurkey Creek: California
+    Troy Built Trail: Colorado
+    Hudson Springs Park: Ohio
+    Kokopelli Trail - Loma To Moab: Colorado
+    Buckhorn Loop: California
+    Kipp's Loop: Colorado
+
+
+    Topic 1:
+    West Face: Idaho
+    Deadwood Ridge Trail: Idaho
+    Orchard / 5 Mile / Watchman: Idaho
+    Blankets Creek: Georgia
+    Bald Mountain Bike Park: Idaho
+    Timberline to Town: Oregon
+    Lower Hulls Gulch: Idaho
+    Ada/Eagle Bike Park: Idaho
+    Fourth Of July Lake / Ants Basin / Robinson Bar: Idaho
+    Saddle / Trail #326: Idaho
+
+    Topic 2:
+    Brandywine Falls Provincial Park: British Columbia
+    Team Pangor: British Columbia
+    Alice Lake Provincial Park: British Columbia
+    Test Of Metal: British Columbia
+    nan: nan
+    Gibbs Lake County Park: Washington
+    Severed Dick: British Columbia
+    Little Mountain : Washington
+    Arlington airport downhill trail: Washington
+    Heart Lake - Acfl: Washington
+
+
+    Topic 3:
+    Allegan State Game Area: Michigan
+    Carbonate Training Loop: Idaho
+    Pigeon Mountain: Georgia
+    Merrell Trail: Michigan
+    Pleasant Valley: Pennsylvania
+    Lightning Bend: Michigan
+    Fort Ebey St Park: Washington
+    Daisy State Park: Arkansas
+    Bartlett Wash: Utah
+    Eagle Rock Loop: Arkansas
+
+
+    Topic 4:
+    Turnbull Canyon: California
+    Blue Jay: Arkansas
+    Pando Ski Area: Michigan
+    Grand Vue Mountain Bike Trail: West Virginia
+    West Branch: Ohio
+    Falls Creek: Washington
+    Pine Mountain Recreation Area: Georgia
+    Luke's Trail: Utah
+    Waterworks Blue: Arkansas
+    Rattlesnake Mtn: Washington
+
+
+    Topic 5:
+    Georgia International Horse Park: Georgia
+    Dauset Trails Nature Center: Georgia
+    Thomas City Park and Trails: West Virginia
+    Sandy Ridge Trail: Pennsylvania
+    Lost Lake Tr/loop: Washington
+    Round Lake: Washington
+    Mount Seymour: British Columbia
+    Pumphouse: Arkansas
+    Heli Pad Shortcut: California
+    Kokopelli Area Trails: Colorado
+
+
 ## Results
 
 ## Next Steps
