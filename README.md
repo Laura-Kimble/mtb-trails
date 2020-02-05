@@ -23,7 +23,7 @@ Chose 10 select locations in the US that have a lot of moutain bike trails nearb
     Grand Rapids
 
 
-Used the mtbproject API to get the trail data: pulled the maximum of 500 trails within a 100 mile radius of each location.  The API returns json with the following format:
+Used the mtbproject API to get the trail data: pulled the maximum of 100 trails within a 100 mile radius of each location (~1000 total trails).  The API returns json with the following format:
 
 (snapshot)
 Some locations appeared to have fewer than 500 trails within this radius, so the resulting dataset was 4365 rows.
@@ -32,6 +32,7 @@ Resulting dataset is 4086 rows.
 
 and in df
 
+Turns out mtb project trail descriptions are very short, about one short sentence.
 
 
 ## EDA
@@ -43,6 +44,21 @@ Added a binary column to denote if the trail appears to be a loop or point-to-po
 Word cloud with the most frequent words across all of the trail summaries (after removing stopwords such as 'trail', 'ride', 'area', 'route', 'way', 'feature', 'section', etc.)
 
 Open question whether to remove 'singletrack' as a stop word: it shows up a lot in many topics, but may also convey meaning b/c not all trails are singletrack and may contain sections or the whole trail as road or doubletrack.
+
+## Featuratization
+
+stop words
+bigram phraser
+lemmatize
+more stop words
+
+TF params: max_df, min_df, max_features
+sklearn LDA vs. gensim LDA
+
+LDA params: # topics, alpha, eta
+
+Perplexity, coherence
+
 
 
 ## Modeling
@@ -74,6 +90,41 @@ Topic 0 seems to be more challenging technical trails where the summary describe
     'flow' 'rocky']
 
     Model perplexity: 596.734
+
+
+Singletracks descriptions LDA, 10 topics, not lemmatized, no n-grams.
+
+    Topic 0:
+    ['river' 'good' 'narrow' 'hikers' 'traffic' 'spots' 'foot' 'worth'
+    'expect' 'run']
+    Topic 1:
+    ['lake' 'climbs' 'good' 'peak' 'views' 'technical' 'fun' 'areas' 'camp'
+    'great']
+    Topic 2:
+    ['mountain' 'jumps' 'features' 'big' 'advanced' 'hills' 'beginner' 'built'
+    'open' 'large']
+    Topic 3:
+    ['rd' 'springs' 'nice' 'hot' 'mi' 'crosses' 'great' 'pine' 'killpecker'
+    'fr']
+    Topic 4:
+    ['mountain' 'great' 'map' 'technical' 'different' 'sure' 'network' 'bull'
+    'lots' 'pretty']
+    Topic 5:
+    ['valley' 'slickrock' 'sand' 'scenery' 'plenty' 'rim' 'moab' 'great'
+    'sweet' 'rough']
+    Topic 6:
+    ['little' 'rocks' 'fun' 'climbs' 'river' 'technical' 'direction' 'red'
+    'good' 'easy']
+    Topic 7:
+    ['park' 'lake' 'hiking' 'state' 'mountain' 'biking' 'areas' 'open'
+    'forest' 'fs']
+    Topic 8:
+    ['track' 'single' 'great' 'roads' 'place' 'double' 'technical' 'loops'
+    'skills' 'wide']
+    Topic 9:
+    ['road' 'creek' 'climb' 'follow' 'downhill' 'steep' 'ridge' 'canyon'
+    'head' 'end']
+    Model perplexity: 806.284
 
 
 ## Results
