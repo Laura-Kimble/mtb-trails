@@ -86,7 +86,7 @@ if __name__ == '__main__':
     # plt.show()
 
 
-    print('reconstruction error:', nmf.reconstruction_err_)
+    print(f'reconstruction error: {nmf.reconstruction_err_:0.3}')
 
     print_top_topic_words(H, tfidf_vect, n=10)
     print('\n\n')
