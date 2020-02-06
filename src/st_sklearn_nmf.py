@@ -1,11 +1,11 @@
 import numpy as np 
 import pandas as pd 
-import matplotlib.pyplot as plt
 import joblib
 from sklearn.decomposition import NMF
 from gensim.parsing.preprocessing import STOPWORDS
 from mtb_sklearn_lda import make_vectorizer, transform_vectorizer, get_top_words
-from st_gensim_lda import get_st_descriptions, featurize_text
+from st_gensim_lda import get_st_descriptions
+import matplotlib.pyplot as plt
 
 
 def get_st_trail_names():
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     all_stopwords = my_stopwords.union(STOPWORDS).union(bitri_stops)
 
     # Create TF-IDF matrix
-    tfidf_vect = make_vectorizer(X, tf_idf=True, lemmatize=False, max_df=0.8, min_df=2, max_features=1000, stop_words=all_stopwords, ngram_range=(1, 2))
+    tfidf_vect = make_vectorizer(X, tf_idf=True, lemmatize=False, max_df=0.6, min_df=2, max_features=1000, stop_words=all_stopwords, ngram_range=(1, 2))
     tfidf = transform_vectorizer(tfidf_vect, X)
     # top_words = get_top_words(tfidf_vect, tfidf, n=50)
     
@@ -113,5 +113,10 @@ if __name__ == '__main__':
 
     # fig, ax = plt.subplots(figsize=(10, 6))
     # ax.plot(k_list, errors)
-    # plt.show()
+    # ax.set_xlabel('number of topics')
+    # ax.set_ylabel('reconstruction error')
+    # ax.set_title('Reconstruction Error vs. Number of Topics')
+    # fig.tight_layout(pad=1)
+    # # plt.show()
+    # fig.savefig('../images/NMF_reconstruction_error_vs_topics.png')
 
