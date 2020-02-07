@@ -163,6 +163,18 @@ Singletrack.com descriptions: NMF with sklearn with 6 topics, stopwords, 2-grams
 
 Top Trails in each topic:
 
+    Topic 0:
+    Golden Gate Canyon State Park: Colorado
+    West Bench Trail: Colorado
+    Bear Creek Lake Park: Colorado
+    Buckhorn Loop: California
+    Hurkey Creek: California
+    Troy Built Trail: Colorado
+    Coopers Rock: West Virginia
+    Kokopelli Trail - Loma To Moab: Colorado
+    Lewis River: Washington
+    Bar M Loop: Utah
+
     Topic 1:
     West Face: Idaho
     Deadwood Ridge Trail: Idaho
@@ -228,20 +240,47 @@ Top Trails in each topic:
     Bartlett Wash: Utah
 
 
+One thing that jumps out when looking at the top trails in each topic, is that they tend to be within a specific state/region of the country.  This folium map shows the top 50 trails for each topic, with each topic being a different color dot.  (Remember that I chose trails within a 100-mile radius of 10 locations, so the overall clusters of dots on the map are simply due to this fact.)  But the clustering of dot colors (topics) around specific regions demonstrate that trail characteristics vary a lot depending on what area of the country you're in.  This makes intuitive sense -- trails in forested areas will be more rooty, trails in areas with a lot of water will have more creeks, etc.  It's nice that the model identified topics that seem to map to different regions.
 
 <div style="text-align:center"><img src="images/map_all_topics.png" width="1200"/></div>
 
-<div style="text-align:center"><img src="images/map_topic0.png" width="800"/></div>
+We can see this effect better by looking at the map for each topic individually.
 
-<<div style="text-align:center"><img src="images/map_topic1.png" width="800"/></div>
+    Topic 0:
+    ['ridge' 'river' 'canyon' 'steep' 'end' 'old' 'gravel' 'hill' 'valley'
+    'reach']
 
-<div style="text-align:center"><img src="images/map_topic2.png" width="800"/></div>
+<div style="text-align:center"><img src="images/map_topic0.png" width="1000"/></div>
 
-<div style="text-align:center"><img src="images/map_topic3.png" width="800"/></div>
+    Topic 1:
+    ['creek' 'crossings' 'creek crossings' 'fisher' 'bear creek' 'lower'
+    'bear' 'steep' 'gulch' 'portion']
 
-<<div style="text-align:center"><img src="images/map_topic4.png" width="800"/></div>
+<<div style="text-align:center"><img src="images/map_topic1.png" width="1000"/></div>
 
-<div style="text-align:center"><img src="images/map_topic5.png" width="800"/></div>
+    Topic 2:
+    ['provincial' 'hiking' 'swimming' 'fishing' 'acres' 'acre' 'camping'
+    'activities' 'river' 'horseback']
+
+<div style="text-align:center"><img src="images/map_topic2.png" width="1000"/></div>
+
+    Topic 3:
+    ['lake' 'short' 'views' 'forest' 'permitted' 'hub' 'lakes' 'columbia' 'fs'
+    'helmets mandatory']
+
+<div style="text-align:center"><img src="images/map_topic3.png" width="1000"/></div>
+
+    Topic 4:
+    ['fun' 'lots' 'little' 'technical' 'climbs' 'pretty' 'roots' 'rocks'
+    'fast' 'challenging']
+
+<<div style="text-align:center"><img src="images/map_topic4.png" width="1000"/></div>
+
+    Topic 5:
+    ['beginner' 'intermediate' 'features' 'jumps' 'advanced' 'loops'
+    'technical' 'open' 'country' 'pump']
+
+<div style="text-align:center"><img src="images/map_topic5.png" width="1000"/></div>
 
 
 ## Results
