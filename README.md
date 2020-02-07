@@ -55,11 +55,13 @@ A look at the distribution of difficulty ratings shows that the largest portion 
 </br>
 The majority of trails are under 10 miles long, but there are a number of longer trails including the longest trail at 140 miles (not shown on chart).
 
+</br>
 <div style="text-align:center"><img src="images/st_trails_by_length.png" width="600"/></div>
   
 </br>
 The average star ratings are unsuprisingly grouped around the 3-5 star range, when they have a rating (not 0).
 
+</br>
 <div style="text-align:center"><img src="images/st_Trails_by_stars.png" width="600"/></div>
 
 </br>
@@ -106,6 +108,7 @@ These make some sense; topic 0 seems to describe more difficult trails that may 
 I also generated topics from this data using gensim's bag-of-words vectorization and gensim LDA, using similar parameters, in order to get the topic visualization provided by gensim.  While the topics/words are not identical to sklearn's, the visualization of 3 topics does show differentiation.
 </br>
 
+</br>
 <div style="text-align:center"><img src="images/mtb_gensim_lda_vis.png" width="800"/></div>
 
 </br>
@@ -181,103 +184,35 @@ After trying various parameters, the model with the most coherent topics (subjec
     'technical' 'open' 'country' 'pump'
 
 
-    Topic 0:
-    ['ridge' 'river' 'canyon' 'steep' 'end' 'old' 'gravel' 'hill' 'valley'
-    'reach']
-    Topic 1:
-    ['creek' 'crossings' 'creek crossings' 'fisher' 'bear creek' 'lower'
-    'bear' 'steep' 'gulch' 'portion']
-    Topic 2:
-    ['provincial' 'hiking' 'swimming' 'fishing' 'acres' 'acre' 'camping'
-    'activities' 'river' 'horseback']
-    Topic 3:
-    ['lake' 'short' 'views' 'forest' 'permitted' 'hub' 'lakes' 'columbia' 'fs'
-    'helmets mandatory']
-    Topic 4:
-    ['fun' 'lots' 'little' 'technical' 'climbs' 'pretty' 'roots' 'rocks'
-    'fast' 'challenging']
-    Topic 5:
-    ['beginner' 'intermediate' 'features' 'jumps' 'advanced' 'loops'
-    'technical' 'open' 'country' 'pump']
 
 
-Top Trails in each topic:
+**Top Trails in each topic:**
 
-    Topic 0:
-    Golden Gate Canyon State Park: Colorado
-    West Bench Trail: Colorado
-    Bear Creek Lake Park: Colorado
-    Buckhorn Loop: California
-    Hurkey Creek: California
-    Troy Built Trail: Colorado
-    Coopers Rock: West Virginia
-    Kokopelli Trail - Loma To Moab: Colorado
-    Lewis River: Washington
-    Bar M Loop: Utah
+Topic 0: | Topic 1: | Topic 2:
+------------ | ------------- | -------------
+Golden Gate Canyon State Park: Colorado | West Face: Idaho | Brandywine Falls Provincial Park: British Columbia
+West Bench Trail: Colorado | Deadwood Ridge Trail: Idaho | Team Pangor: British Columbia
+Bear Creek Lake Park: Colorado | Bald Mountain Bike Park: Idaho | Alice Lake Provincial Park: British Columbia
+Buckhorn Loop: California | Orchard / 5 Mile / Watchman: Idaho | Test Of Metal: British Columbia
+Hurkey Creek: California | Blankets Creek: Georgia | Gibbs Lake County Park: Washington
+Troy Built Trail: Colorado | Timberline to Town: Oregon | Severed Dick: British Columbia
+Coopers Rock: West Virginia | Lower Hulls Gulch: Idaho | Little Mountain : Washington
+Kokopelli Trail - Loma To Moab: Colorado | Ada/Eagle Bike Park: Idaho | Arlington airport downhill trail: Washington
+Lewis River: Washington | Ada/Eagle Bike Park: Idaho | Heart Lake - Acfl: Washington
+Bar M Loop: Utah | Galena Lodge Trail System: Idaho | 
 
-    Topic 1:
-    West Face: Idaho
-    Deadwood Ridge Trail: Idaho
-    Bald Mountain Bike Park: Idaho
-    Orchard / 5 Mile / Watchman: Idaho
-    Blankets Creek: Georgia
-    Timberline to Town: Oregon
-    Lower Hulls Gulch: Idaho
-    Ada/Eagle Bike Park: Idaho
-    Saddle / Trail #326: Idaho
-    Galena Lodge Trail System: Idaho
-
-
-    Topic 2:
-    Brandywine Falls Provincial Park: British Columbia
-    Team Pangor: British Columbia
-    Alice Lake Provincial Park: British Columbia
-    Test Of Metal: British Columbia
-    nan: nan
-    Gibbs Lake County Park: Washington
-    Severed Dick: British Columbia
-    Little Mountain : Washington
-    Arlington airport downhill trail: Washington
-    Heart Lake - Acfl: Washington
-
-
-    Topic 3:
-    Germania Creek - Chamberlain Creek Loop: Idaho
-    Dionisio Point Provincial Park: British Columbia
-    Old Salmon River Trail: Oregon
-    San Juan Trail: California
-    Mahalo: Idaho
-    Grand River Park: Michigan
-    Little Missouri: Arkansas
-    Watson Mill Bridge State Park: Georgia
-    Pass Lake Trail : Washington
-    Gowlland Tod Provincial Park: British Columbia
-
-
-    Topic 4:
-    Pine Mountain Recreation Area: Georgia
-    Turnbull Canyon: California
-    Dog River Trail: Oregon
-    Blue Jay: Arkansas
-    Rattlesnake Mtn: Washington
-    Acorn Park Trail: Pennsylvania
-    Pando Ski Area: Michigan
-    Section 36 (Beaver Lake): Washington
-    Thomas City Park and Trails: West Virginia
-    Scapoose: Oregon
-
-
-    Topic 5:
-    Allegan State Game Area: Michigan
-    Carbonate Training Loop: Idaho
-    Pigeon Mountain: Georgia
-    Fort Ebey St Park: Washington
-    Lightning Bend: Michigan
-    Merrell Trail: Michigan
-    Pleasant Valley: Pennsylvania
-    Daisy State Park: Arkansas
-    Eagle Rock Loop: Arkansas
-    Bartlett Wash: Utah
+Topic 3: | Topic 4: | 
+------------ | ------------ | 
+Germania Creek - Chamberlain Creek Loop: Idaho | Pine Mountain Recreation Area: Georgia | Allegan State Game Area: Michigan
+Dionisio Point Provincial Park: British Columbia | Turnbull Canyon: California | Carbonate Training Loop: Idaho
+Old Salmon River Trail: Oregon | Dog River Trail: Oregon | Pigeon Mountain: Georgia
+San Juan Trail: California | Blue Jay: Arkansas | Fort Ebey St Park: Washington
+Mahalo: Idaho | Rattlesnake Mtn: Washington | Lightning Bend: Michigan
+Grand River Park: Michigan | Acorn Park Trail: Pennsylvania | Merrell Trail: Michigan
+Little Missouri: Arkansas | Pando Ski Area: Michigan | Pleasant Valley: Pennsylvania
+Watson Mill Bridge State Park: Georgia | Section 36 (Beaver Lake): Washington | Daisy State Park: Arkansas
+Pass Lake Trail : Washington | Thomas City Park and Trails: West Virginia | Eagle Rock Loop: Arkansas
+Gowlland Tod Provincial Park: British Columbia | Scapoose: Oregon | Bartlett Wash: Utah
 
 
 #### Mapping the Topics
@@ -286,6 +221,7 @@ One thing that jumps out when looking at the top trails in each topic, is that t
 
 <div style="text-align:center"><img src="images/map_all_topics.png" width="1200"/></div>
 
+</br>
 We can see this effect better by looking at the map for each topic individually.
 
     Topic 0:
@@ -293,36 +229,42 @@ We can see this effect better by looking at the map for each topic individually.
     'reach']
 
 <div style="text-align:center"><img src="images/map_topic0.png" width="1000"/></div>
+</br>
 
     Topic 1:
     ['creek' 'crossings' 'creek crossings' 'fisher' 'bear creek' 'lower'
     'bear' 'steep' 'gulch' 'portion']
 
 <div style="text-align:center"><img src="images/map_topic1.png" width="1000"/></div>
+</br>
 
     Topic 2:
     ['provincial' 'hiking' 'swimming' 'fishing' 'acres' 'acre' 'camping'
     'activities' 'river' 'horseback']
 
 <div style="text-align:center"><img src="images/map_topic2.png" width="1000"/></div>
+</br>
 
     Topic 3:
     ['lake' 'short' 'views' 'forest' 'permitted' 'hub' 'lakes' 'columbia' 'fs'
     'helmets mandatory']
 
 <div style="text-align:center"><img src="images/map_topic3.png" width="1000"/></div>
+</br>
 
     Topic 4:
     ['fun' 'lots' 'little' 'technical' 'climbs' 'pretty' 'roots' 'rocks'
     'fast' 'challenging']
 
 <div style="text-align:center"><img src="images/map_topic4.png" width="1000"/></div>
+</br>
 
     Topic 5:
     ['beginner' 'intermediate' 'features' 'jumps' 'advanced' 'loops'
     'technical' 'open' 'country' 'pump']
 
 <div style="text-align:center"><img src="images/map_topic5.png" width="1000"/></div>
+</br>
 
 
 ## Future Work
