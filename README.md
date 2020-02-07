@@ -14,14 +14,12 @@ The goal of this project is to uncover latent topics in trail descriptions, i.e.
 ## Data
 
 The websites <a href="https://www.mtbproject.com">mtbproject.com</a> and <a href="https://www.singletracks.com">singletracks.com</a> both have mountain biking trail
-data available through their APIs, that includes the trail name, location, difficulty, star rating, length in miles, and a short summary description of the trail.  To start, I chose to use data from mtbproject since it's the site/app I'm more familiar with.  However, the trail summaries on mtbproject are very short (usually one short sentence), which I found did not yield a lot of useful information (more on that later).  So I switched to using the data from singletracks since the descriptions were several sentences/paragraphs that yielded more information for NLP and finding topics.
+data available through their APIs, that includes the trail name, location, difficulty, star rating, length in miles, and a short summary description of the trail.  To start, I chose to use data from mtbproject since it's the site/app I'm more familiar with.  However, the trail summaries on mtbproject are very short (usually one short sentence), which I found did not yield a lot of useful information (more on that later).  So I switched to using the data from singletracks since the descriptions were several sentences/paragraphs that yielded more information for NLP and finding topics.  The "ABOUT THIS TRAIL" section is the description, and can be acccessed (along with the additional trail data fields) through the singletracks API.
 
 <div style="text-align:center"><img src="images/singletracks_trail_example.png" width="800"/></div>
-
+</br>
   
-  
-  
-The "ABOUT THIS TRAIL" section is the description, and can be acccessed (along with the additional trail data fields) through the singletracks API.  I chose 10 select locations in the US that have a lot of moutain bike trails nearby, based on my previous knowledge and looking at a map of all US trails.  I also chose locations that were spread across different geographical regions in the country.
+I chose 10 select locations in the US that have a lot of moutain bike trails nearby, based on my previous knowledge and looking at a map of all US trails.  I also chose locations that were spread across different geographical regions in the country.
 
     Portland
     Denver
@@ -62,11 +60,14 @@ The average star ratings are unsuprisingly grouped around the 3-5 star range, wh
 
 <div style="text-align:center"><img src="images/st_Trails_by_stars.png" width="600"/></div>
 
-
+</br>
 Since I'm interested in the words in the descriptions, a general word cloud shows the most frequent words (with general stopwords removed, but before removing the 'mountain bike specific' stopwords I used for the topic modeling.)
+</br>
+</br>
 
 <div style="text-align:center"><img src="images/st_wordcloud1.png" width="800"/></div>
 
+</br>
 
 ## Featuratization & Modeling
 
@@ -95,13 +96,18 @@ Since I'm looking for topics, and presuppose that a trail description may contai
     Model perplexity: 596.734
 
 
+</br>
 These make some sense; topic 0 seems to describe more difficult trails that may be steep, fast, and long.  Topic 1 seems like easier, more connector-like trails with words like 'road', 'doubletrack', 'short', and 'access'.  Topic 2 also looks like more difficult, technical trails that may be rocky.
 
 I also generated topics from this data using gensim's bag-of-words vectorization and gensim LDA, using similar parameters, in order to get the topic visualization provided by gensim.  While the topics/words are not identical to sklearn's, the visualization of 3 topics does show differentiation.
+</br>
 
 <div style="text-align:center"><img src="images/mtb_gensim_lda_vis.png" width="800"/></div>
 
+</br>
 Ultimately however, the short descriptions on mtbproject did not produce enough useful information for infomrative topics.  A comparison of the description length between mtbproject.com and singletracks.com shows that the singletracks descriptions contain much more information.
+</br>
+</br>
 
 <div style="text-align:center"><img src="images/description_length.png" width="500"/></div>
 <div style="text-align:center"><img src="images/st_description_length.png" width="500"/></div> 
@@ -122,6 +128,7 @@ The next step was to create a gensim bag-of-words and try out some LDA models.  
 
 <div style="text-align:center"><img src="images/st_lda_metrics_topics.png" width="1000"/></div> 
 
+</br>
 The resulting LDA model using 5 topics and the default values for alpha and eta, yielded a model with perplexity of -7.35 and a coherence score of 0.35.
 The topics I was getting however didn't seem as informative or distinct as I would like. Even though the gensim visualization showed good separation between topics, I couldn't make intuitive sense between topics and didn't find this result particulary useful.
 
@@ -141,7 +148,7 @@ The topics I was getting however didn't seem as informative or distinct as I wou
 
 Lastly, I used Non-negative matrix factorization (NMF) in sklearn using the singletracks descriptions, with similar featurization.  I plotted reconstruction error against a varying number of topics between two and fourteen, but this showed a nearly perfect inverse linear relationship -- the more topics used, the smaller the error but there was no obvious "elbow", so I didn't find this very useful.
 
-After trying various parameters, the model with the most coherent topics (subjectively) seemed to be 6 topics, using all stopwords including biking-specific words, no lemmatization, and bigrams.  These topics sound distinct, and seem to categorize different types of trails and/or different topics that may be present in the description (talking about the trail/ride itself vs. other activities and things to see in the area.)
+After trying various parameters, the model with the most coherent topics (subjectively) seemed to be 6 topics, using all stopwords including biking-specific words, no lemmatization, and bigrams.  These topics sound distinct, and seem to categorize different types of trails and/or different topics that may be present in the description (talking about the trail/ride itself vs. other activities and things to see in the area).  The reconstruction error was 29.3.
 
 
     Topic 0:
@@ -277,7 +284,7 @@ We can see this effect better by looking at the map for each topic individually.
     ['fun' 'lots' 'little' 'technical' 'climbs' 'pretty' 'roots' 'rocks'
     'fast' 'challenging']
 
-<<div style="text-align:center"><img src="images/map_topic4.png" width="1000"/></div>
+<div style="text-align:center"><img src="images/map_topic4.png" width="1000"/></div>
 
     Topic 5:
     ['beginner' 'intermediate' 'features' 'jumps' 'advanced' 'loops'
