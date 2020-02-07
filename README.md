@@ -10,6 +10,7 @@ The goal of this project is to uncover latent topics in trail descriptions, i.e.
 <div style="text-align:center"><img src="images/mtb_pic.jpg" width="1000"/></div>
 
 
+  
 ## Data
 
 The websites <a href="https://www.mtbproject.com">mtbproject.com</a> and <a href="https://www.singletracks.com">singletracks.com</a> both have mountain biking trail
@@ -17,6 +18,9 @@ data available through their APIs, that includes the trail name, location, diffi
 
 <div style="text-align:center"><img src="images/singletracks_trail_example.png" width="800"/></div>
 
+  
+  
+  
 The "ABOUT THIS TRAIL" section is the description, and can be acccessed (along with the additional trail data fields) through the singletracks API.  I chose 10 select locations in the US that have a lot of moutain bike trails nearby, based on my previous knowledge and looking at a map of all US trails.  I also chose locations that were spread across different geographical regions in the country.
 
     Portland
@@ -48,15 +52,15 @@ A few observations on the general features:
 
 A look at the distribution of difficulty ratings shows that the largest portion of trails are intermediate.
 
-<div ><img src="images/st_Trails_by_difficulty_ordered.png" width="600"/></div>
+<div style="text-align:center"><img src="images/st_Trails_by_difficulty_ordered.png" width="600"/></div>
 
 The majority of trails are under 10 miles long, but there are a number of longer trails including the longest trail at 140 miles (not shown on chart).
 
-<div ><img src="images/st_trails_by_length.png" width="600"/></div>
+<div style="text-align:center"><img src="images/st_trails_by_length.png" width="600"/></div>
 
 The average star ratings are unsuprisingly grouped around the 3-5 star range, when they have a rating (not 0).
 
-div ><img src="images/st_Trails_by_stars.png" width="600"/></div>
+<div style="text-align:center"><img src="images/st_Trails_by_stars.png" width="600"/></div>
 
 
 Since I'm interested in the words in the descriptions, a general word cloud shows the most frequent words (with general stopwords removed, but before removing the 'mountain bike specific' stopwords I used for the topic modeling.)
@@ -104,21 +108,22 @@ Ultimately however, the short descriptions on mtbproject did not produce enough 
 
 ### Singletracks Descriptions
 
-With the longer descriptions to work with, I was able to do some more featurization and get some more topics.  First, I removed desciptions with fewer than 40 characters from my dataset, since these contain little information and included gems such as "Fun sandy areas though", and the succinct "epic".
+With the longer descriptions to work with using the singletracks.com data, I was able to do some more featurization and get some more topics.  First, I removed desciptions with fewer than 40 characters from my dataset, since these contain little information and included gems such as "Fun sandy areas though", and the succinct "epic".
 
 Featurization:
 I created a custom class and methods to featurize my descriptions.  The general process is:
 - Tokenize sentences into words
 - Remove first set of stopwords, that are not be included in the bigrams and trigrams creation.  This is a modified version of the gensim STOPWORDS that took out qualifier words like 'not', 'very', 'too', 'few' that may be useful for the bigrams/trigrams (e.g., want to keep phrases like "not too steep").
-- Create bigrams and trigrams using gensim Phrases
+- Create bigrams and trigrams using gensim Phrases and Phraser
 - Lemmatize using nltk WordNetLemmatizer and nltk's part-of-speech tagging.
 - Remove second set of stopwords, including more biking-specific words and bigram/trigram phrases to remove (e.g., 'parking_lot', 'mountain_bike').  
 
-The next step was to create a gensim bag-of-words and try out some LDA models.  I varied the number of topics, document-topic priors (alpha), and topic-word priors (eta) and viewed the effects on the model perplexity and topic coherence.  However, this showed a linear decrease in perplexity as the number of topics increased and a seemingly random change in coherence based on number of topics (different spikes/plot each time the models were run since I didn't use a set random state).  Varying alpha and eta produced similarly uninformative plots.  Thus, I chose 6 topics and the default parameters for alpha and eta.
+The next step was to create a gensim bag-of-words and try out some LDA models.  I varied the number of topics, document-topic priors (alpha), and topic-word priors (eta) and viewed the effects on the model perplexity and topic coherence.  However, this showed a linear decrease in perplexity as the number of topics increased and a seemingly random change in coherence based on number of topics (different spikes/plot each time the models were run since I didn't use a set random state).  Varying alpha and eta produced similarly uninformative plots. 
 
 <div style="text-align:center"><img src="images/st_lda_metrics_topics.png" width="1000"/></div> 
 
-The topics I was getting however didn't seem as informative or distinct as I would like. 
+The resulting LDA model using 5 topics and the default values for alpha and eta, yielded a model with perplexity of -7.35 and a coherence score of 0.35.
+The topics I was getting however didn't seem as informative or distinct as I would like. Even though the gensim visualization showed good separation between topics, I couldn't make intuitive sense between topics and didn't find this result particulary useful.
 
     [(0,
     "foot", "steep", "creek", "little", "technical", "pas", "drop", "lake", "direction", "switchbacks"),
@@ -127,19 +132,17 @@ The topics I was getting however didn't seem as informative or distinct as I wou
     (2,
     "hill", "creek", "ridge", "easy", "technical", "lake", "rock", "begin", "canyon", "long"'),
     (3,
-    '"little", "hill", "lake", "challenge", "view", *"bridge", "rock", "technical", "dirt", "valley"'),
+    '"little", "hill", "lake", "challenge", "view", "bridge", "rock", "technical", "dirt", "valley"'),
     (4,
     "river", "ridge", "small", "camp", "rock", "water", "past", "easy", "challenge", "large"')]
 
-NMF: Using a TF-IDF may be more enlightening since many topic words appear in a lot of trail descriptions... let's find the words in a particular topic/description that are more unique.
-sklearn NMF
 
-6 topics
+## Final Model
 
+Lastly, I used Non-negative matrix factorization (NMF) in sklearn using the singletracks descriptions, with similar featurization.  I plotted reconstruction error against a varying number of topics between two and fourteen, but this showed a nearly perfect inverse linear relationship -- the more topics used, the smaller the error but there was no obvious "elbow", so I didn't find this very useful.
 
+After trying various parameters, the model with the most coherent topics (subjectively) seemed to be 6 topics, using all stopwords including biking-specific words, no lemmatization, and bigrams.  These topics sound distinct, and seem to categorize different types of trails and/or different topics that may be present in the description (talking about the trail/ride itself vs. other activities and things to see in the area.)
 
-
-Singletrack.com descriptions: NMF with sklearn with 6 topics, stopwords, 2-grams, max_df=0.6:
 
     Topic 0:
     ['ridge' 'river' 'canyon' 'steep' 'end' 'old' 'gravel' 'hill' 'valley'
@@ -283,6 +286,6 @@ We can see this effect better by looking at the map for each topic individually.
 <div style="text-align:center"><img src="images/map_topic5.png" width="1000"/></div>
 
 
-## Results
+## Future Work
 
-## Next Steps
+Next steps would include using a distance metric like cosine distance to be able to find similar trails to a given trail.  This could then be used in a recommender to help riders find other trails they might enjoy with similar features.  Given the unique geographic spread between topics, these results might also help inform riders about which areas of the country they might enjoy going to, depending their preferred riding style and what other activities/features in the area they might be interested in.

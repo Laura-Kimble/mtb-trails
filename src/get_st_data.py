@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np 
 
 def get_trail_data(lat_lon_list, url, headers, radius=100, per_page=10):
-    ''' Given a list of lat/lon tuples, send an api request for each lat/long location,
+    ''' Given a list of lat/lon tuples, send an api request for each lat/lon location,
     and return a pandas dataframe with all the response data.
     '''
 

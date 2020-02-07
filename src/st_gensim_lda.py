@@ -1,117 +1,11 @@
 import numpy as np 
 import pandas as pd 
-import gensim
+from gensim.models import LdaMulticore
 import gensim.corpora as corpora
-from gensim.utils import simple_preprocess
 from gensim.parsing.preprocessing import STOPWORDS
-from gensim.models import CoherenceModel, Phrases
-from gensim.models.phrases import Phraser
-import nltk
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
+from gensim.models import CoherenceModel
 from pprint import pprint
-
-
-class Featurizer(object):
-    ''' Class to hold the information to feature a set of documents, including sets of stopwords,
-    and whether to include bigrams and/or trigrams.
-    Methods of the class include the primary method to 'featurize' a set of document strings into
-    tokens using the class attributes, as well as methods to update the attributes.
-      '''
-
-    def __init__(self, first_stopwords, second_stopwords, bigrams=True, trigrams=True):
-        self.first_stopwords = first_stopwords
-        self.second_stopwords = second_stopwords
-        self.bigrams=bigrams
-        self.trigrams=trigrams
-
-    def update_stopwords(self, stopwords_to_add, add_to='first_stopwords'):
-        if add_to == 'first_stopwords':
-            self.first_stopwords = self.first_stopwords.union(set(stopwords_to_add))
-        else:
-            self.second_stopwords = self.second_stopwords.union(set(stopwords_to_add))
-
-    def unlist_stopwords(self, stopwords_to_remove, remove_from='first_stopwords'):
-        if remove_from == 'first_stopwords':
-            self.first_stopwords = self.first_stopwords.difference(set(stopwords_to_remove))
-        else:
-            self.second_stopwords = self.second_stopwords.difference(set(stopwords_to_remove))
-
-    def update_ngrams(self, grams='bigrams', set_to=True):
-        if grams == 'bigrams':
-            self.bigrams = set_to
-        else:
-            self.trigrams = set_to
-
-    def featurize(self, documents):
-        tokenized_docs = documents.map(self._tokenize)
-        tokens_nostops = tokenized_docs.apply(self._remove_stopwords, args=(self.first_stopwords, ))
-        
-        if self.bigrams:
-            bigrams = self._ngramize(tokens_nostops, min_count=5)
-            if self.trigrams:
-                # create trigrams
-                trigrams = self._ngramize(bigrams)
-                new_tokens = trigrams
-            else:
-                new_tokens = bigrams
-        else:
-            new_tokens = tokens_nostops
-
-        # lemmatize and remove stopwords again
-        processed_docs = new_tokens.apply(self._preprocess)
-        return processed_docs
-
-    def _tokenize(self, text):
-        result = []
-        for token in gensim.utils.simple_preprocess(text):
-            result.append(token)
-        return result
-
-
-    def _remove_stopwords(self, text, stopwords_list):
-        result = []
-        for word in text:
-            if word not in stopwords_list:
-                result.append(word)
-        return result
-
-
-    def _ngramize(self, text, min_count=5):
-        model = Phrases(text, min_count=min_count, threshold=2)
-        phraser = Phraser(model)
-        return text.map(lambda x: phraser[x])
-
-
-    def _get_wordnet_pos(self, word):
-        tag = nltk.pos_tag([word])[0][1][0].lower()
-        tag_dict = {'j': 'a',
-                'n': 'n',
-                'v': 'v',
-                'r': 'r'}
-        return tag_dict.get(tag, 'n')
-
-
-    def _lemmatize(self, text):
-        pos = self._get_wordnet_pos(text)
-        return WordNetLemmatizer().lemmatize(text, pos=pos)
-
-
-    def _preprocess(self, text):
-        result = []
-        for token in text:
-            if (token not in self.second_stopwords) and (len(token) > 3):
-                lem = self._lemmatize(token)
-                if lem not in self.second_stopwords:
-                    result.append(lem)
-        return result
-
-    def print_params(self):
-        print(f'Bigrams={self.bigrams}')
-        print(f'Trigrams={self.trigrams}\n')
-        print(f'First set of stopwords: {self.first_stopwords}\n')
-        print(f'Second set of stopwords: {self.second_stopwords}.')
-
+from featurizer import Featurizer
 
 
 def get_st_descriptions():
@@ -122,7 +16,7 @@ def get_st_descriptions():
 
 def make_gensim_bow(processed_docs, no_below=2, no_above=0.9, keep_n=100000, keep_tokens=None):
     
-    id2word = gensim.corpora.Dictionary(processed_docs)
+    id2word = corpora.Dictionary(processed_docs)
     id2word.filter_extremes(no_below=no_below, no_above=no_above, keep_n=keep_n, keep_tokens=keep_tokens)
     
     bow_corpus = [id2word.doc2bow(text) for text in processed_docs]
@@ -167,7 +61,7 @@ if __name__ == '__main__':
     bow_corpus, id2word = make_gensim_bow(processed_docs, no_below=3, no_above=0.6, keep_n=10000)
 
     k = 6
-    lda_model = gensim.models.LdaMulticore(bow_corpus, num_topics=k, id2word=id2word, passes=5, workers=2, iterations=100)
+    lda_model = LdaMulticore(bow_corpus, num_topics=k, id2word=id2word, passes=5, workers=2, iterations=100)
     perplexity, coherence = get_perplexity_coherence(lda_model, bow_corpus, processed_docs, id2word)
     print(f'LDA with {k} topics: Perplexity is {perplexity:0.2} and coherence is {coherence:0.2}.')
     pprint(lda_model.print_topics())

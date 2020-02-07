@@ -10,7 +10,7 @@ def create_multiple_dots_layers(df, base_map, layer_names, trail_names_for_layer
     ARGS:
         df (dataframe): Dataframe with all data to be filtered for each layer, with 'lat' and 'lon' columns
         base_map (folium Map object): Map to apply the layers to
-        layer_names (list of str): Names for the layers.
+        layer_names (list of str): Names for the layers (topics)
         trail_names_for_layers (list of list of tuples): Each element in the list is a list of tuples with the 'top trails' for a topic.
             The first element in the tuple is the trail name, and the second is the region (not used in this mapping function).
     '''
@@ -37,7 +37,7 @@ def create_dots_layer(df, base_map, layer_name, color='black'):
 
     feature_map = folium.FeatureGroup(name = layer_name)
 
-    for idx, row in df.iterrows():
+    for i, row in df.iterrows():
         folium.CircleMarker(location=(row['lat'], row['lon']),
                                     radius=1.5,
                                     color=color,

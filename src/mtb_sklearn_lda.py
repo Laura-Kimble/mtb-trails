@@ -1,14 +1,11 @@
 import numpy as np 
 import pandas as pd 
-import string
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.decomposition import LatentDirichletAllocation, PCA
 from gensim.utils import simple_preprocess
 from gensim.parsing.preprocessing import STOPWORDS
 from nltk.corpus import stopwords
-from nltk.tokenize import RegexpTokenizer
 import joblib
-from sklearn.metrics.pairwise import cosine_distances
 import spacy
 
 
@@ -48,6 +45,7 @@ def get_top_words(vectorizer_model, tf_matrix, n=20):
     top_words = feature_names[top_indices]
     top_freq = word_freq[top_indices]
     return dict(zip(top_words, top_freq))
+
 
 def print_topic_words(lda_model, vectorizer_model, n=10):
     feature_names = np.array(vectorizer_model.get_feature_names())

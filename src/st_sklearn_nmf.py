@@ -40,12 +40,11 @@ def get_topic_trails(W, n=10):
     trail_names = get_st_trail_names()
     regions = get_st_regions()
     
-    for i, topic in enumerate(W.T):
+    for topic in W.T:
         top_ind = topic.argsort()[:-n-1:-1]
         top_trails = trail_names[top_ind]
         top_regions = regions[top_ind] 
         all_topic_trails.append(list(zip(top_trails, top_regions)))
-    
     return all_topic_trails
 
 
@@ -87,7 +86,8 @@ if __name__ == '__main__':
     topics = ['topic_{}'.format(i) for i in range(k)]
 
     nmf, W, H = fit_nmf(tfidf, n_topics=k, alpha=0.)
-
+    W_df = pd.DataFrame(W, index=trail_names, columns=topics)
+    H_df = pd.DataFrame(H, index=topics, columns=feature_names)
     print(f'reconstruction error: {nmf.reconstruction_err_:0.3}')
 
     print_top_topic_words(H, feature_names, n=10)
