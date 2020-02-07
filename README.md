@@ -56,11 +56,13 @@ A look at the distribution of difficulty ratings shows that the largest portion 
 The majority of trails are under 10 miles long, but there are a number of longer trails including the longest trail at 140 miles (not shown on chart).
 
 </br>
+</br>
 <div style="text-align:center"><img src="images/st_trails_by_length.png" width="600"/></div>
   
 </br>
 The average star ratings are unsuprisingly grouped around the 3-5 star range, when they have a rating (not 0).
 
+</br>
 </br>
 <div style="text-align:center"><img src="images/st_Trails_by_stars.png" width="600"/></div>
 
@@ -143,6 +145,7 @@ The next step was to create a gensim bag-of-words and try out some LDA models.  
 </br>
 The resulting LDA model using 5 topics and the default values for alpha and eta, yielded a model with perplexity of -7.35 and a coherence score of 0.35.
 The topics I was getting however didn't seem as informative or distinct as I would like. Even though the gensim visualization showed good separation between topics, I couldn't make intuitive sense between topics and didn't find this result particulary useful.
+</br>
 </br>
 
 **Topic 0:**
