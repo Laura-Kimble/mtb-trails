@@ -16,7 +16,7 @@ The goal of this project is to uncover latent topics in trail descriptions, i.e.
 The websites <a href="https://www.mtbproject.com">mtbproject.com</a> and <a href="https://www.singletracks.com">singletracks.com</a> both have mountain biking trail
 data available through their APIs, that includes the trail name, location, difficulty, star rating, length in miles, and a short summary description of the trail.  To start, I chose to use data from mtbproject since it's the site/app I'm more familiar with.  However, the trail summaries on mtbproject are very short (usually one short sentence), which I found did not yield a lot of useful information (more on that later).  So I switched to using the data from singletracks since the descriptions were several sentences/paragraphs that yielded more information for NLP and finding topics.  The "ABOUT THIS TRAIL" section is the description, and can be acccessed (along with the additional trail data fields) through the singletracks API.
 
-<div style="text-align:center"><img src="images/singletracks_trail_example.png" width="600"/></div>
+<p align="center"><img src="images/singletracks_trail_example.png" width="600"/></p>
 </br>
   
 I chose 10 select locations in the US that have a lot of moutain bike trails nearby, based on my previous knowledge and looking at a map of all US trails.  I also chose locations that were spread across different geographical regions in the country.
@@ -43,7 +43,6 @@ To explore and model the data, I converted this into a pandas dataframe and adde
 <div style="text-align:center"><img src="images/st_df_example.png" width="1200"/></div>
 
 </br>
-</br>
 The description field is the focus of this project, but the other fields such as trail location, difficulty, etc provide useful information for exploratory data analysis and comparing topic clusters.
 
 ## EDA
@@ -59,14 +58,14 @@ The majority of trails are under 10 miles long, but there are a number of longer
 
 </br>
 </br>
-<div style="text-align:center"><img src="images/st_trails_by_length.png" width="600"/></div>
+<p align="center"><img src="images/st_trails_by_length.png" width="600"/></p>
   
 </br>
 The average star ratings are unsuprisingly grouped around the 3-5 star range, when they have a rating (not 0).
 
 </br>
 </br>
-<div style="text-align:center"><img src="images/st_Trails_by_stars.png" width="600"/></div>
+<p align="center"><img src="images/st_Trails_by_stars.png" width="600"/></p>
 
 </br>
 Since I'm interested in the words in the descriptions, a general word cloud shows the most frequent words (with general stopwords removed, but before removing the 'mountain bike specific' stopwords I used for the topic modeling.)
@@ -85,7 +84,7 @@ As mentioned above, I first used descriptions from mtbproject.com even though th
 
 Before trying any topic modeling on the data, I ran PCA with 2 components on a TF-IDF matrix of the descriptions in order to create a 2D plot to see if there is any cluster differentiation.  This plot shows that there does seem to be some differentation in the data, and that the trail difficulty corresponds with where the descriptions fall on the two PCA components, with green and green-blue trails appearing more in the left and lower-left area, and more difficult trails appearning more in the lower right area.
 
-<div style="text-align:center"><img src="images/PCA_difficulty.png" width="600"/></div>
+<p align="center"><img src="images/PCA_difficulty.png" width="600"/></p>
 
 </br>
 Since I'm looking for topics, and presuppose that a trail description may contain more than one topic, I then used soft clustering approaches to uncover topics.  I trained an LDA model (using sklearn's LatentDirichletAllocation), with varying parameters.  I found the 'best' set of topics using just 3 topics, with a document-topic prior and word-topic prior of 0.9.  It seems likely that with such short descriptions, it would be difficult to find much more than 3 useful topics.
@@ -122,8 +121,8 @@ Ultimately however, the short descriptions on mtbproject did not produce enough 
 </br>
 </br>
 
-<div style="text-align:center"><img src="images/description_length.png" width="500"/></div>
-<div style="text-align:center"><img src="images/st_description_length.png" width="500"/></div> 
+<p align="center"><img src="images/description_length.png" width="500"/></p>
+<p align="center"><img src="images/st_description_length.png" width="500"/></p> 
 
 ### Singletracks Descriptions
 
