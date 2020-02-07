@@ -91,6 +91,7 @@ Since I'm looking for topics, and presuppose that a trail description may contai
 
 </br>
 </br>
+
 **Topic 0:**
 ['climb' 'park' 'descent' 'fun' 'steep' 'ridge' 'fast' 'climbs' 'long'
 'scenic']
