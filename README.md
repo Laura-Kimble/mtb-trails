@@ -16,21 +16,21 @@ The goal of this project is to uncover latent topics in trail descriptions, i.e.
 The websites <a href="https://www.mtbproject.com">mtbproject.com</a> and <a href="https://www.singletracks.com">singletracks.com</a> both have mountain biking trail
 data available through their APIs, that includes the trail name, location, difficulty, star rating, length in miles, and a short summary description of the trail.  To start, I chose to use data from mtbproject since it's the site/app I'm more familiar with.  However, the trail summaries on mtbproject are very short (usually one short sentence), which I found did not yield a lot of useful information (more on that later).  So I switched to using the data from singletracks since the descriptions were several sentences/paragraphs that yielded more information for NLP and finding topics.  The "ABOUT THIS TRAIL" section is the description, and can be acccessed (along with the additional trail data fields) through the singletracks API.
 
-<div style="text-align:center"><img src="images/singletracks_trail_example.png" width="700"/></div>
+<div style="text-align:center"><img src="images/singletracks_trail_example.png" width="600"/></div>
 </br>
   
 I chose 10 select locations in the US that have a lot of moutain bike trails nearby, based on my previous knowledge and looking at a map of all US trails.  I also chose locations that were spread across different geographical regions in the country.
 
-    Portland
-    Denver
-    Moab
-    Pittsburgh
-    Los Angeles
-    Bellingham WA
-    Boise
-    Atlanta
-    Little Rock
-    Grand Rapids
+- Portland
+- Denver
+- Moab
+- Pittsburgh
+- Los Angeles
+- Bellingham WA
+- Boise
+- Atlanta
+- Little Rock
+- Grand Rapids
 
 
 I used the API to get data on 100 trails within a 100 mile radius of each location, to get 1000 total trails (the maximum number the API allows per day for free).
@@ -42,6 +42,8 @@ To explore and model the data, I converted this into a pandas dataframe and adde
 
 <div style="text-align:center"><img src="images/st_df_example.png" width="1200"/></div>
 
+</br>
+</br>
 The description field is the focus of this project, but the other fields such as trail location, difficulty, etc provide useful information for exploratory data analysis and comparing topic clusters.
 
 ## EDA
@@ -50,7 +52,7 @@ A few observations on the general features:
 
 A look at the distribution of difficulty ratings shows that the largest portion of trails are intermediate.  
 
-<div style="text-align:center"><img src="images/st_Trails_by_difficulty_ordered.png" width="600"/></div>  
+<p align="center"><img src="images/st_Trails_by_difficulty_ordered.png" width="600"/></p>  
   
 </br>
 The majority of trails are under 10 miles long, but there are a number of longer trails including the longest trail at 140 miles (not shown on chart).
