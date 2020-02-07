@@ -184,35 +184,48 @@ After trying various parameters, the model with the most coherent topics (subjec
     'technical' 'open' 'country' 'pump'
 
 
-
-
+</br>
+</br>
 **Top Trails in each topic:**
 
-Topic 0: | Topic 1: | Topic 2:
------------- | ------------- | -------------
-Golden Gate Canyon State Park: Colorado | West Face: Idaho | Brandywine Falls Provincial Park: British Columbia
-West Bench Trail: Colorado | Deadwood Ridge Trail: Idaho | Team Pangor: British Columbia
-Bear Creek Lake Park: Colorado | Bald Mountain Bike Park: Idaho | Alice Lake Provincial Park: British Columbia
-Buckhorn Loop: California | Orchard / 5 Mile / Watchman: Idaho | Test Of Metal: British Columbia
-Hurkey Creek: California | Blankets Creek: Georgia | Gibbs Lake County Park: Washington
-Troy Built Trail: Colorado | Timberline to Town: Oregon | Severed Dick: British Columbia
-Coopers Rock: West Virginia | Lower Hulls Gulch: Idaho | Little Mountain : Washington
-Kokopelli Trail - Loma To Moab: Colorado | Ada/Eagle Bike Park: Idaho | Arlington airport downhill trail: Washington
-Lewis River: Washington | Ada/Eagle Bike Park: Idaho | Heart Lake - Acfl: Washington
+Topic 0: | Topic 1:
+------------ | -------------
+Golden Gate Canyon State Park: Colorado | West Face: Idaho
+West Bench Trail: Colorado | Deadwood Ridge Trail: Idaho
+Bear Creek Lake Park: Colorado | Bald Mountain Bike Park: Idaho
+Buckhorn Loop: California | Orchard / 5 Mile / Watchman: Idaho
+Hurkey Creek: California | Blankets Creek: Georgia
+Troy Built Trail: Colorado | Timberline to Town: Oregon
+Coopers Rock: West Virginia | Lower Hulls Gulch: Idaho
+Kokopelli Trail - Loma To Moab: Colorado | Ada/Eagle Bike Park: Idaho
+Lewis River: Washington | Ada/Eagle Bike Park: Idaho
 Bar M Loop: Utah | Galena Lodge Trail System: Idaho | 
 
-Topic 3: | Topic 4: | 
------------- | ------------ | 
-Germania Creek - Chamberlain Creek Loop: Idaho | Pine Mountain Recreation Area: Georgia | Allegan State Game Area: Michigan
-Dionisio Point Provincial Park: British Columbia | Turnbull Canyon: California | Carbonate Training Loop: Idaho
-Old Salmon River Trail: Oregon | Dog River Trail: Oregon | Pigeon Mountain: Georgia
-San Juan Trail: California | Blue Jay: Arkansas | Fort Ebey St Park: Washington
-Mahalo: Idaho | Rattlesnake Mtn: Washington | Lightning Bend: Michigan
-Grand River Park: Michigan | Acorn Park Trail: Pennsylvania | Merrell Trail: Michigan
-Little Missouri: Arkansas | Pando Ski Area: Michigan | Pleasant Valley: Pennsylvania
-Watson Mill Bridge State Park: Georgia | Section 36 (Beaver Lake): Washington | Daisy State Park: Arkansas
-Pass Lake Trail : Washington | Thomas City Park and Trails: West Virginia | Eagle Rock Loop: Arkansas
-Gowlland Tod Provincial Park: British Columbia | Scapoose: Oregon | Bartlett Wash: Utah
+Topic 2: | Topic 3:
+------------ | ------------
+Brandywine Falls Provincial Park: British Columbia | Germania Creek - Chamberlain Creek Loop: Idaho
+Team Pangor: British Columbia | Old Salmon River Trail: Oregon
+Alice Lake Provincial Park: British Columbia | Anacortes Community Forest Lands: Washington
+Test Of Metal: British Columbia | Dionisio Point Provincial Park: British Columbia
+Gibbs Lake County Park: Washington | Little Missouri: Arkansas
+Severed Dick: British Columbia | Japanese Gulch: Washington
+Little Mountain : Washington | Syncline: Washington
+Arlington airport downhill trail: Washington | Callaway Gardens Fitness Series: Georgia
+Heart Lake - Acfl: Washington | Canaan Loop Rd - FR 13: West Virginia
+
+
+Topic 4: | Topic 5
+------------ | ------------
+Pine Mountain Recreation Area: Georgia | Allegan State Game Area: Michigan
+Turnbull Canyon: California | Carbonate Training Loop: Idaho
+Dog River Trail: Oregon | Pigeon Mountain: Georgia
+Blue Jay: Arkansas | Fort Ebey St Park: Washington
+Rattlesnake Mtn: Washington | Lightning Bend: Michigan
+Acorn Park Trail: Pennsylvania | Merrell Trail: Michigan
+Pando Ski Area: Michigan | Pleasant Valley: Pennsylvania
+Section 36 (Beaver Lake): Washington | Daisy State Park: Arkansas
+Thomas City Park and Trails: West Virginia | Eagle Rock Loop: Arkansas
+Scapoose: Oregon | Bartlett Wash: Utah
 
 
 #### Mapping the Topics
