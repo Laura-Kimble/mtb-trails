@@ -232,13 +232,8 @@ We can see this effect better by looking at the map for each topic individually.
 </br>
 </br>
 
-**Topic 0:** | **Topic 1:** 
------------- | ------------
+**Topic 0:**
 ['ridge' 'river' 'canyon' 'steep' 'end' 'old' 'gravel' 'hill' 'valley' 'reach'] | ['creek' 'crossings' 'creek crossings' 'fisher' 'bear creek' 'lower' 'bear' 'steep' 'gulch' 'portion']
-<div style="text-align:center"><img src="images/map_topic0.png" width="500"/></div> | <div style="text-align:center"><img src="images/map_topic1.png" width="500"/></div>
-
-
-
 
 <div style="text-align:center"><img src="images/map_topic0.png" width="1000"/></div>
 </br>
