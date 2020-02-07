@@ -86,19 +86,20 @@ Before trying any topic modeling on the data, I ran PCA with 2 components on a T
 </br>
 Since I'm looking for topics, and presuppose that a trail description may contain more than one topic, I then used soft clustering approaches to uncover topics.  I trained an LDA model (using sklearn's LatentDirichletAllocation), with varying parameters.  I found the 'best' set of topics using just 3 topics, with a document-topic prior and word-topic prior of 0.9.  It seems likely that with such short descriptions, it would be difficult to find much more than 3 useful topics.
 
-3 topics:
 
-    Topic 0:
-    ['climb' 'park' 'descent' 'fun' 'steep' 'ridge' 'fast' 'climbs' 'long'
-    'scenic']
-    Topic 1:
-    ['great' 'road' 'creek' 'views' 'short' 'lake' 'nice' 'doubletrack'
-    'access' 'connector']
-    Topic 2:
-    ['fun' 'technical' 'downhill' 'mountain' 'good' 'flowy' 'rock' 'fast'
-    'flow' 'rocky']
+**Topic 0:**
+['climb' 'park' 'descent' 'fun' 'steep' 'ridge' 'fast' 'climbs' 'long'
+'scenic']
 
-    Model perplexity: 596.734
+**Topic 1:**
+['great' 'road' 'creek' 'views' 'short' 'lake' 'nice' 'doubletrack'
+'access' 'connector']
+
+**Topic 2:**
+['fun' 'technical' 'downhill' 'mountain' 'good' 'flowy' 'rock' 'fast'
+'flow' 'rocky']
+
+**Model perplexity:** 596.7
 
 
 </br>
@@ -144,23 +145,32 @@ The resulting LDA model using 5 topics and the default values for alpha and eta,
 The topics I was getting however didn't seem as informative or distinct as I would like. Even though the gensim visualization showed good separation between topics, I couldn't make intuitive sense between topics and didn't find this result particulary useful.
 </br>
 
-    [(0,
-    "foot", "steep", "creek", "little", "technical", "pas", "drop", "lake", "direction", "switchbacks"),
-    (1,
-    "short", "creek", "ridge", "forest", "steep", "river", "sign", "rock", "close", "open"),
-    (2,
-    "hill", "creek", "ridge", "easy", "technical", "lake", "rock", "begin", "canyon", "long"'),
-    (3,
-    '"little", "hill", "lake", "challenge", "view", "bridge", "rock", "technical", "dirt", "valley"'),
-    (4,
-    "river", "ridge", "small", "camp", "rock", "water", "past", "easy", "challenge", "large"')]
+**Topic 0:**
+"foot", "steep", "creek", "little", "technical", "pas", "drop", "lake", "direction", "switchbacks"
 
+**Topic 1:**
+"short", "creek", "ridge", "forest", "steep", "river", "sign", "rock", "close", "open"
+
+**Topic 2:**
+"hill", "creek", "ridge", "easy", "technical", "lake", "rock", "begin", "canyon", "long"
+
+**Topic 3:**
+'"little", "hill", "lake", "challenge", "view", "bridge", "rock", "technical", "dirt", "valley"
+
+**Topic 4:**
+"river", "ridge", "small", "camp", "rock", "water", "past", "easy", "challenge", "large"
+
+**Perplexity:** -7.35
+
+**Coherence:** 0.35
+
+</br>
 
 #### NMF
 
 Lastly, I used Non-negative matrix factorization (NMF) in sklearn using the singletracks descriptions, with similar featurization.  I plotted reconstruction error against a varying number of topics between two and fourteen, but this showed a nearly perfect inverse linear relationship -- the more topics used, the smaller the error but there was no obvious "elbow", so I didn't find this very useful.
 
-After trying various parameters, the model with the most coherent topics (subjectively) seemed to be 6 topics, using all stopwords including biking-specific words, no lemmatization, and bigrams.  These topics sound distinct, and seem to categorize different types of trails and/or different topics that may be present in the description (talking about the trail/ride itself vs. other activities and things to see in the area).  The reconstruction error was 29.3.
+After trying various parameters, the model with the most coherent topics (subjectively) seemed to be 6 topics, using all stopwords including biking-specific words, no lemmatization, and bigrams.  These topics sound distinct, and seem to categorize different types of trails and/or different topics that may be present in the description (talking about the trail/ride itself vs. other activities and things to see in the area).
 
 
 **TOPICS**
@@ -183,10 +193,15 @@ After trying various parameters, the model with the most coherent topics (subjec
 **Topic 5:** 'beginner' 'intermediate' 'features' 'jumps' 'advanced' 'loops'
     'technical' 'open' 'country' 'pump'
 
+**Reconstruction Error:** 29.3
+
 
 </br>
-</br>
-**Top Trails in each topic:**
+
+**Top 10 trails in topics 0 and 1**
+
+*Top trails for other topics not shown for brevity.*
+
 
 Topic 0: | Topic 1:
 ------------ | -------------
@@ -197,35 +212,9 @@ Buckhorn Loop: California | Orchard / 5 Mile / Watchman: Idaho
 Hurkey Creek: California | Blankets Creek: Georgia
 Troy Built Trail: Colorado | Timberline to Town: Oregon
 Coopers Rock: West Virginia | Lower Hulls Gulch: Idaho
-Kokopelli Trail - Loma To Moab: Colorado | Ada/Eagle Bike Park: Idaho
+Kokopelli Trail - Loma To Moab: Colorado | Saddle / Trail #326: Idaho
 Lewis River: Washington | Ada/Eagle Bike Park: Idaho
 Bar M Loop: Utah | Galena Lodge Trail System: Idaho | 
-
-Topic 2: | Topic 3:
------------- | ------------
-Brandywine Falls Provincial Park: British Columbia | Germania Creek - Chamberlain Creek Loop: Idaho
-Team Pangor: British Columbia | Old Salmon River Trail: Oregon
-Alice Lake Provincial Park: British Columbia | Anacortes Community Forest Lands: Washington
-Test Of Metal: British Columbia | Dionisio Point Provincial Park: British Columbia
-Gibbs Lake County Park: Washington | Little Missouri: Arkansas
-Severed Dick: British Columbia | Japanese Gulch: Washington
-Little Mountain : Washington | Syncline: Washington
-Arlington airport downhill trail: Washington | Callaway Gardens Fitness Series: Georgia
-Heart Lake - Acfl: Washington | Canaan Loop Rd - FR 13: West Virginia
-
-
-Topic 4: | Topic 5
------------- | ------------
-Pine Mountain Recreation Area: Georgia | Allegan State Game Area: Michigan
-Turnbull Canyon: California | Carbonate Training Loop: Idaho
-Dog River Trail: Oregon | Pigeon Mountain: Georgia
-Blue Jay: Arkansas | Fort Ebey St Park: Washington
-Rattlesnake Mtn: Washington | Lightning Bend: Michigan
-Acorn Park Trail: Pennsylvania | Merrell Trail: Michigan
-Pando Ski Area: Michigan | Pleasant Valley: Pennsylvania
-Section 36 (Beaver Lake): Washington | Daisy State Park: Arkansas
-Thomas City Park and Trails: West Virginia | Eagle Rock Loop: Arkansas
-Scapoose: Oregon | Bartlett Wash: Utah
 
 
 #### Mapping the Topics
@@ -236,45 +225,46 @@ One thing that jumps out when looking at the top trails in each topic, is that t
 
 </br>
 We can see this effect better by looking at the map for each topic individually.
+</br>
 
-    Topic 0:
-    ['ridge' 'river' 'canyon' 'steep' 'end' 'old' 'gravel' 'hill' 'valley'
-    'reach']
+**Topic 0:**
+['ridge' 'river' 'canyon' 'steep' 'end' 'old' 'gravel' 'hill' 'valley'
+'reach']
 
 <div style="text-align:center"><img src="images/map_topic0.png" width="1000"/></div>
 </br>
 
-    Topic 1:
-    ['creek' 'crossings' 'creek crossings' 'fisher' 'bear creek' 'lower'
-    'bear' 'steep' 'gulch' 'portion']
+**Topic 1:**
+['creek' 'crossings' 'creek crossings' 'fisher' 'bear creek' 'lower'
+'bear' 'steep' 'gulch' 'portion']
 
 <div style="text-align:center"><img src="images/map_topic1.png" width="1000"/></div>
 </br>
 
-    Topic 2:
-    ['provincial' 'hiking' 'swimming' 'fishing' 'acres' 'acre' 'camping'
-    'activities' 'river' 'horseback']
+**Topic 2:**
+['provincial' 'hiking' 'swimming' 'fishing' 'acres' 'acre' 'camping'
+'activities' 'river' 'horseback']
 
 <div style="text-align:center"><img src="images/map_topic2.png" width="1000"/></div>
 </br>
 
-    Topic 3:
-    ['lake' 'short' 'views' 'forest' 'permitted' 'hub' 'lakes' 'columbia' 'fs'
-    'helmets mandatory']
+**Topic 3:**
+['lake' 'short' 'views' 'forest' 'permitted' 'hub' 'lakes' 'columbia' 'fs'
+'helmets mandatory']
 
 <div style="text-align:center"><img src="images/map_topic3.png" width="1000"/></div>
 </br>
 
-    Topic 4:
-    ['fun' 'lots' 'little' 'technical' 'climbs' 'pretty' 'roots' 'rocks'
-    'fast' 'challenging']
+**Topic 4:**
+['fun' 'lots' 'little' 'technical' 'climbs' 'pretty' 'roots' 'rocks'
+'fast' 'challenging']
 
 <div style="text-align:center"><img src="images/map_topic4.png" width="1000"/></div>
 </br>
 
-    Topic 5:
-    ['beginner' 'intermediate' 'features' 'jumps' 'advanced' 'loops'
-    'technical' 'open' 'country' 'pump']
+**Topic 5:**
+['beginner' 'intermediate' 'features' 'jumps' 'advanced' 'loops'
+'technical' 'open' 'country' 'pump']
 
 <div style="text-align:center"><img src="images/map_topic5.png" width="1000"/></div>
 </br>
