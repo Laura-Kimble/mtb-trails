@@ -9,7 +9,7 @@ from map_trails import create_multiple_dots_layers
 if __name__ == '__main__':
 
     #Load the pickeled dataframes for CO trails
-    st_df = pd.read_pickle('../data/co_trails_df_2')
+    st_df = pd.read_pickle('../data/co_trails_df')
     W_df = pd.read_pickle('../models/co_W_df')
 
     top_topic_trails = get_co_topic_trails(W_df.values, n=50)

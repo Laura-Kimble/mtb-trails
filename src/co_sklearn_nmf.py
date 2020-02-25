@@ -8,22 +8,22 @@ from st_sklearn_nmf import print_top_topic_words, print_topic_trails, fit_nmf
 import matplotlib.pyplot as plt
 
 def get_co_descriptions():
-    st_df = pd.read_pickle('../data/co_trails_df_2')
+    st_df = pd.read_pickle('../data/co_trails_df')
     st_df_with_desc = st_df[st_df['description_length']>=40]
     return st_df_with_desc['description']
 
 def get_co_trail_names():
-    st_df = pd.read_pickle('../data/co_trails_df_2')
+    st_df = pd.read_pickle('../data/co_trails_df')
     st_df_with_desc = st_df[st_df['description_length']>=40]
     return st_df_with_desc['name']
 
 def get_co_regions():
-    st_df = pd.read_pickle('../data/co_trails_df_2')
+    st_df = pd.read_pickle('../data/co_trails_df')
     st_df_with_desc = st_df[st_df['description_length']>=40]
     return st_df_with_desc['region_name']
 
 def get_co_index():
-    st_df = pd.read_pickle('../data/co_trails_df_2')
+    st_df = pd.read_pickle('../data/co_trails_df')
     st_df_with_desc = st_df[st_df['description_length']>=40]
     return st_df_with_desc['id']
 

@@ -1,9 +1,11 @@
 import numpy as np
 import pandas as pd 
 import item_recommender as ir
+import joblib
 from sklearn.metrics.pairwise import cosine_similarity
 from co_sklearn_nmf import get_co_trail_names, get_co_index
 from random import choice, randint, sample
+from sklearn.preprocessing import StandardScaler
 import importlib
 importlib.reload(ir)
 
@@ -31,15 +33,53 @@ def filter_reccos(recco_items, recco_ids, filter_criteria, df):
     return list(filtered_items), list(filtered_ids)
 
 
+def make_X_df(df, W_df, features_list, feature_weights, topics_weight):
+    ''' Creates an X dataframe with the set of features including topics from the W matrix df, weighted by the feature weights.
+    INPUTS:
+        df: Dataframe with the features to extract, and including an id to map to the W matrix df
+        W_df: Topic loadings matrix (dataframe), with an id column to map to the df
+        features_list: List of column names from the df to include in the recommender.
+        feature_weights: List of weights for the features, to tune the recommender.
+        topics_weight (float): Weight to use for all of the desciprtion topic features.
+    OUTPUT:
+        X: A new dataframe with all of the scaled, weighted features (including topic loadings).
+    '''
+    features_list.extend(W_df.columns)
+    feature_weights.extend([topics_weight] * len(W_df.columns))
+    X = pd.merge(df, W_df, on='id')[features_list]
+    X = scale_cols(X, feature_weights)
+    return X
+
+
+def scale_cols(df, weights):
+    ''' Scaler divides each value by the max of that column and multiplies by the feature weight (rather than using a standard scaler).
+    All features range from 0 to a max value, and are not normally distributed.
+    Weights (list) are the feature weights used to tune the recommender.
+    '''
+    for i, col in enumerate(df):
+        if 'length' in col: # Exception: For trail length, use 30 mi as the max rather than the true max of 500+ miles.
+            max_val = 30
+            df[col] = df[col].map(lambda x: min((x / max_val), 1) * weights[i])
+        else:
+            df[col] = df[col].astype(float) / df[col].max() * weights[i]
+    return df
+
+
 if __name__ == '__main__':
     W_df = pd.read_pickle('../models/co_W_df')
-    st_df = pd.read_pickle('../data/co_trails_df_2')
+    st_df = pd.read_pickle('../data/co_trails_df')
     st_df_with_desc = st_df[st_df['description_length']>=40]
-    feature_cols = ['length_rounded', 'rating_rounded', 'difficulty_num']  # list out feature cols to use in model --
-    # need to do some featurizing (one-hot encode Lift, pump... difficulty num)
-    feature_cols.extend(list(W_df.columns))
 
-    X = pd.merge(st_df_with_desc, W_df, on='id')[feature_cols]
+    feature_cols = ['length_rounded', \
+                    'rating_rounded', \
+                    'difficulty_num', \
+                    'dist_to_Denver_km',\
+                    'Pump_track', \
+                    'Lift_service']  
+    feature_weights = [1] * len(feature_cols)
+    topics_weight = 1
+
+    X = make_X_df(st_df_with_desc, W_df, feature_cols, feature_weights, topics_weight)
     trail_names = list(get_co_trail_names())
     trail_ids = list(get_co_index())
 
@@ -55,8 +95,13 @@ if __name__ == '__main__':
     print(f'Similar trails are:\n{recco_trails}\n\n')
     print(f'Filtered set of recommendations:\n{filtered_names}')
 
-    rand_n = randint(2, 10)
-    rand_user_trails = sample(set(trail_names), rand_n)
-    user_recs = trail_recommender.get_user_recommendation(rand_user_trails, n=5)
-    print(f'User trails are:\n{rand_user_trails}\n\n')
-    print(f'Recommendations for user are:\n{user_recs}')
+    # Pickle the st_df_with_desc df and the recommender model.
+    st_df_with_desc.to_pickle('../data/st_df_with_desc')
+    joblib.dump(trail_recommender, '../models/trail_recommender.joblib')
+
+
+    # rand_n = randint(2, 10)
+    # rand_user_trails = sample(set(trail_names), rand_n)
+    # user_recs = trail_recommender.get_user_recommendation(rand_user_trails, n=5)
+    # print(f'User trails are:\n{rand_user_trails}\n\n')
+    # print(f'Recommendations for user are:\n{user_recs}')
