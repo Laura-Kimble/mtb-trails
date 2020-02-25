@@ -16,7 +16,8 @@ class ItemRecommender():
 
         INPUT -
             X: NUMPY ARRAY - Rows are items, columns are feature values
-            trail_names: LIST - List of the item names/titles in order of the numpy arrray
+            trail_names: LIST of the item names/titles in order of the numpy arrray
+            trail_ids: LIST of the trail ids to look up in the oringal dataframe with add'l trail data
         
         OUTPUT - None
 
@@ -49,12 +50,12 @@ class ItemRecommender():
             print('Item not in data set')
             return None
 
-        item_index = np.argwhere(self.trail_names == item)[0][0]
+        item_index = np.argwhere(np.array(self.trail_names) == item)[0][0]
         item_row = self.similarity_matrix[item_index]
         similar_ind = np.argsort(item_row)[-2:-n - 2:-1]
-        similar_items = self.trail_names[similar_ind]
-        similar_item_ids = self.trail_ids[similar_ind]
-        return similar_items, similar_item_ids
+        similar_items = np.array(self.trail_names)[similar_ind]
+        similar_item_ids = np.array(self.trail_ids)[similar_ind]
+        return list(similar_items), list(similar_item_ids)
 
 
     def get_user_profile(self, items):
@@ -73,11 +74,10 @@ class ItemRecommender():
         '''
         item_indices = []
         for item in items:
-            item_ind = np.argwhere(self.trail_names == item)[0][0]
+            item_ind = np.argwhere(np.array(self.trail_names) == item)[0][0]
             item_indices.append(item_ind)
-        user_profile = np.sum(self.X[item_indices], axis=0)
-        user_profile = np.array(user_profile)[0]
-
+        user_profile = np.sum(self.X.iloc[item_indices], axis=0)
+        user_profile = np.array(user_profile)
         return user_profile
 
 
@@ -107,6 +107,7 @@ class ItemRecommender():
             similar_trail = self.trail_names[similar_ind]
             if similar_trail not in items:
                 results.append(similar_trail)
+        return results
 
                 
 

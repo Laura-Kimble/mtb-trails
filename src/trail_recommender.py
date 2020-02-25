@@ -3,7 +3,7 @@ import pandas as pd
 import item_recommender as ir
 from sklearn.metrics.pairwise import cosine_similarity
 from co_sklearn_nmf import get_co_trail_names, get_co_index
-from random import choice
+from random import choice, randint, sample
 import importlib
 importlib.reload(ir)
 
@@ -35,7 +35,7 @@ if __name__ == '__main__':
     W_df = pd.read_pickle('../models/co_W_df')
     st_df = pd.read_pickle('../data/co_trails_df_2')
     st_df_with_desc = st_df[st_df['description_length']>=40]
-    feature_cols = ['length', 'rating', 'difficulty_num']  # list out feature cols to use in model --
+    feature_cols = ['length_rounded', 'rating_rounded', 'difficulty_num']  # list out feature cols to use in model --
     # need to do some featurizing (one-hot encode Lift, pump... difficulty num)
     feature_cols.extend(list(W_df.columns))
 
@@ -51,5 +51,12 @@ if __name__ == '__main__':
 
     filter_criteria_dict = {'difficulty': ['intermediate', 'advanced']}
     filtered_names, filtered_ids = filter_reccos(recco_trails, recco_trail_ids, filter_criteria_dict, st_df_with_desc)
-    print(f'Your trail is {rand_trail}:')
-    print(f'Similar trails are: {recco_trails}')
+    print(f'Your trail is {rand_trail}:\n\n')
+    print(f'Similar trails are:\n{recco_trails}\n\n')
+    print(f'Filtered set of recommendations:\n{filtered_names}')
+
+    rand_n = randint(2, 10)
+    rand_user_trails = sample(set(trail_names), rand_n)
+    user_recs = trail_recommender.get_user_recommendation(rand_user_trails, n=5)
+    print(f'User trails are:\n{rand_user_trails}\n\n')
+    print(f'Recommendations for user are:\n{user_recs}')
