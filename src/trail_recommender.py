@@ -35,7 +35,8 @@ if __name__ == '__main__':
     W_df = pd.read_pickle('../models/co_W_df')
     st_df = pd.read_pickle('../data/co_trails_df_2')
     st_df_with_desc = st_df[st_df['description_length']>=40]
-    feature_cols = ['length', 'rating']  # list out feature cols to use in model -- need to do some featurizing (one-hot encode Lift, pump... difficulty num)
+    feature_cols = ['length', 'rating', 'difficulty_num']  # list out feature cols to use in model --
+    # need to do some featurizing (one-hot encode Lift, pump... difficulty num)
     feature_cols.extend(list(W_df.columns))
 
     X = pd.merge(st_df_with_desc, W_df, on='id')[feature_cols]
