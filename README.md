@@ -89,6 +89,8 @@ Before trying any topic modeling on the data, I ran PCA with 2 components on a T
 </br>
 Since I'm looking for topics, and presuppose that a trail description may contain more than one topic, I then used soft clustering approaches to uncover topics.  I trained an LDA model (using sklearn's LatentDirichletAllocation), with varying parameters.  I found the 'best' set of topics using just 3 topics, with a document-topic prior and word-topic prior of 0.9.  It seems likely that with such short descriptions, it would be difficult to find much more than 3 useful topics.
 
+</br>
+</br>
 
 **Topic 0:**
 ['climb' 'park' 'descent' 'fun' 'steep' 'ridge' 'fast' 'climbs' 'long'
@@ -233,7 +235,7 @@ We can see this effect better by looking at the map for each topic individually.
 </br>
 
 **Topic 0:**
-['ridge' 'river' 'canyon' 'steep' 'end' 'old' 'gravel' 'hill' 'valley' 'reach'] | ['creek' 'crossings' 'creek crossings' 'fisher' 'bear creek' 'lower' 'bear' 'steep' 'gulch' 'portion']
+['ridge' 'river' 'canyon' 'steep' 'end' 'old' 'gravel' 'hill' 'valley' 'reach'] 
 
 <div style="text-align:center"><img src="images/map_topic0.png" width="1000"/></div>
 </br>
