@@ -15,12 +15,12 @@ def create_multiple_dots_layers(df, base_map, layer_names, trail_names_for_layer
             The first element in the tuple is the trail name, and the second is the region (not used in this mapping function).
     '''
 
-    colors = ['red', 'orange', 'blue', 'purple', 'green', 'black']
+    colors = ['red', 'orange', 'blue', 'purple', 'green', 'black', 'gray', 'tan', 'pink', 'yellow']
 
     for idx, layer in enumerate(layer_names):
         trail_names = [trail for trail, region in trail_names_for_layers[idx]]
         layer_df = df[df['name'].map(lambda x: x in trail_names)]  
-        color = colors[idx % 7]
+        color = colors[idx % 10]
         create_dots_layer(layer_df, base_map, layer, color=color)
         
 
