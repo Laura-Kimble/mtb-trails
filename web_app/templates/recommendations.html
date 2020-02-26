@@ -35,27 +35,42 @@
     <main role="main" class="container">
         <div class="starter-template">
             <div class="page-header">
-                <h1>Get recommendations based on a trail you like.</h1>
+                <h1>Recommendations</h1>
             </div>
+            <div class="select-label">Your Trail</div>
 
-            <div style="padding: 20px 25% 20px 25%;">
-                <form action="/recommendations" method='POST' >
-                    <div class="select-label">Select a trail in Colorado that you like.</br>Start typing the trail name to see options.</div>
+                <table class='table'>
+                    <tr>
+                    {% for col in trail_df.columns %}
+                    <th>{{col}}</th>
+                    {% endfor %}
+                    </tr>
+                    {% for _, row in trail_df.iterrows() %}
+                    <tr>
+                        {% for entry in row %}
+                        <td>{{ entry }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </table>
+               <p></p>
 
-                    <select name="trail" id="select_trail" class="picker">
-                      <option value=''>Select a trail...</option>
-                      {% for trail in df['name'].unique()|sort %}
-                      <option value="{{ trail }}">{{ trail }}</option>
-                      {% endfor %}
-                    </select>
-
-                    <div>
-                    </br>
-                        <button class="button" type="submit">Get my recommendations</button> 
-                    </div>
-
-                </form>
-            </div>
+            <div class="select-label">Trail Recommendations</div>
+               
+               <table class='table'>
+                    <tr>
+                    {% for col in reccos_df.columns %}
+                    <th>{{col}}</th>
+                    {% endfor %}
+                    </tr>
+                    {% for _, row in reccos_df.iterrows() %}
+                    <tr>
+                        {% for entry in row %}
+                        <td>{{ entry }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </table>
 
             <div class="view" >
             </div>
