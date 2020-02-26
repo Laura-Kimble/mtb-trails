@@ -1,7 +1,55 @@
 body {
   padding-top: 5rem;
 }
+
+main {
+  color: greenyellow;
+  /* text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black; */
+  font-family: "Arial Black", Gadget, sans-serif;
+}
+
+.main-header {
+  color: greenyellow;
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+  font-family: "Arial Black", Gadget, sans-serif;
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.page-header {
+  color: greenyellow;
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+
+.select-label {
+  color: black;
+  /* text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black; */
+  font-family: Arial, Helvetica, sans-serif;
+  /* text-align: left; */
+  padding: 0.5rem 1.5rem;
+  font-size: 18px;
+}
+
+.picker {
+  text-align: left;
+  padding: 5px 15px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+}
+
+.button {
+  background-color: whitesmoke;
+  border: none;
+  color: black;
+  padding: 5px 15px;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+}
+
 .starter-template {
-  padding: 3rem 1.5rem;
+  padding: 2rem 1.5rem;
   text-align: center;
 }
