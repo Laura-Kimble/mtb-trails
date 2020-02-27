@@ -26,7 +26,10 @@
             <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/inputs">Trail Recommender</a>
+            <a class="nav-link" href="/inputs">Recommender</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="/inputs_multi">Recommender: Multiple Inputs</a>
           </li>
         </ul>
       </div>
@@ -39,9 +42,19 @@
             </div>
 
             <div style="text-align: center">
-              <form action="/inputs" method='GET' >
-                <button class="button" type="submit">Show me where to shred</button> 
-              </form>
+              <div class="buttons">
+                <div style="padding: 1px 20px ;">
+                  <form action="/inputs" method='GET' >
+                    <button class="button" type="submit">From one trail</button> 
+                  </form>
+                </div>
+                
+                <div style="padding: 1px 20px;">
+                  <form action="/inputs_multi" method='GET' >
+                    <button class="button" type="submit">From a set of trails</button> 
+                  </form>
+                </div>
+              </div>
             </div>
 
             <div class="view" >

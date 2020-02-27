@@ -12,7 +12,7 @@ main {
   color: greenyellow;
   text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
   font-family: "Arial Black", Gadget, sans-serif;
-  padding: 2rem 1.5rem;
+  padding: 1rem 1.5rem;
   text-align: center;
 }
 
@@ -25,7 +25,6 @@ main {
 
 .select-label {
   color: black;
-  /* text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black; */
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
   padding: 0.5rem 1.5rem;
@@ -40,13 +39,20 @@ main {
 }
 
 .button {
-  background-color: whitesmoke;
-  border: none;
+  background-color: greenyellow;
+  border-radius: 12px;
+  border-color: black;
   color: black;
   padding: 5px 15px;
   text-align: center;
   font-size: 16px;
   cursor: pointer;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
 }
 
 .table {
@@ -58,15 +64,17 @@ main {
   font-size: 14px;
   font-family: Arial, Helvetica, sans-serif;
   }
-  /* @media only screen and (max-width: 1000px) {
-      .table {
-          text-align: center;
-          display: flex;
-          justify-content: flex-start;
-      }
-  } */
+
+.box {
+  background-color: whitesmoke;
+  padding: 20px 15px;
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: left;
+}
 
 .starter-template {
   padding: 2rem 1.5rem;
   text-align: center;
+  color: black;
 }

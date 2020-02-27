@@ -22,11 +22,14 @@
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item active">
             <a class="nav-link" href="/inputs">Trail Recommender</a>
+          </li>
+          <li class="nav-item">
+                <a class="nav-link" href="/inputs_multi">Recommender from multiple inputs</a>
           </li>
         </ul>
       </div>
@@ -38,20 +41,20 @@
                 <h1>Get recommendations based on a trail you like.</h1>
             </div>
 
-            <div style="padding: 20px 25% 20px 25%;">
+            <div style="padding: 20px 20px 25%;">
                 <form action="/recommendations" method='POST' >
-                    <div class="select-label">Select a trail in Colorado that you like.</br>Start typing the trail name to see options.</div>
+                    <div class="select-label">Select a trail that you like. You can start typing the trail name to see options.</div>
 
                     <select name="trail" id="select_trail" class="picker">
                       <option value=''>Select a trail...</option>
-                      {% for trail in df['name'].unique()|sort %}
+                      {% for trail in trail_names|sort %}
                       <option value="{{ trail }}">{{ trail }}</option>
                       {% endfor %}
                     </select>
 
                     <div>
                     </br>
-                        <button class="button" type="submit">Get my recommendations</button> 
+                        <button class="button" type="submit">Show me where to shred</button> 
                     </div>
 
                 </form>

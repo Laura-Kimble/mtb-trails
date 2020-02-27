@@ -65,6 +65,14 @@ def scale_cols(df, weights):
     return df
 
 
+def get_best_trails(trail_ids, df, n=5):
+    '''From a list of trail ids, return a list of the n "best" trails, according to the star rating.
+    '''
+    ids_df = df[df['id'].map(lambda x: x in trail_ids)]
+    best_ids = ids_df.sort_values(by='rating', ascending=False)['id'][:n]
+    return list(best_ids)
+
+
 if __name__ == '__main__':
     W_df = pd.read_pickle('../models/co_W_df')
     st_df = pd.read_pickle('../data/co_trails_df')

@@ -90,8 +90,7 @@ class ItemRecommender():
             n -  INT - number of items to return
 
         OUTPUT 
-            items - LIST - n recommended items
-
+            results - LIST - n recommended items
     
         Make use of the get_user_profile method to create a user profile that will be used to get the similarity to all items 
         and recommend the top n.

@@ -17,7 +17,7 @@
   </head>
 
   <body style="background-image: url('../static/images/bw_pic.jpg');
-  background-repeat: no-repeat; background-size: cover;width:100%;">
+  background-repeat: tile; background-size:contain; width:100%;">
 
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
@@ -25,10 +25,10 @@
           <li class="nav-item">
             <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" href="/inputs">Trail Recommender</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item active">
                 <a class="nav-link" href="/inputs_multi">Recommender from multiple inputs</a>
           </li>
         </ul>
@@ -38,49 +38,23 @@
     <main role="main" class="container">
         <div class="starter-template">
             <div class="page-header">
-                <h1>Recommendations</h1>
+                <h1>Get recommendations based on multiple trails you like.</h1>
             </div>
 
-            <div class="select-label">Your Trail</div>
-            <table class='table'>
-                <tr>
-                <th>NAME</th>
-                {% for col in trail_df.columns[2:] %}
-                <th>{{col.upper().replace('_', ' ')}}</th>
-                {% endfor %}
-                </tr>
-                {% for _, row in trail_df.iterrows() %}
-                <tr>
-                    <td> <a href = {{row.url}} target="_blank">{{row['name']}}</a> </td>
-                    {% for entry in row[2:] %}
-                    <td>{{ entry }}</td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </table>
-            <p></p>
+            <div style="padding: 20px 25% 20px 25%;">
+                <form action="/recommendations_multi" method='POST' >
+                    <div class="select-label">Select some trails that you have ridden and like.</div>
+                    <div class="box">
+                        {% for trail_name in df['name'].unique()|sort %}
+                            <input type="checkbox" name="trail_names" value="{{trail_name}}"> <b>{{trail_name}}</b><br>
+                        {% endfor %}
+                    </div>
 
-            <div class="select-label">Trail Recommendations</div>
-            <table class='table'>
-                <tr>
-                <th>NAME</th>
-                {% for col in reccos_df.columns[2:] %}
-                <th>{{ col.upper().replace('_', ' ') }}</th>
-                {% endfor %}
-                </tr>
-                {% for _, row in reccos_df.iterrows() %}
-                <tr>
-                    <td> <a href = {{row.url}} target="_blank">{{row['name']}}</a> </td>
-                    {% for entry in row[2:] %}
-                    <td>{{ entry }}</td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </table>
+                    <div>
+                    </br>
+                        <button class="button" type="submit">Show me where to shred</button> 
+                    </div>
 
-            <div style="text-align: center">
-                <form action="/inputs" method='GET' >
-                    <button class="button" type="submit">Try another trail</button> 
                 </form>
             </div>
 
