@@ -41,14 +41,14 @@
                 <h1>Get recommendations based on a trail you like.</h1>
             </div>
 
-            <div style="padding: 20px 20px 25%;">
+            <div style="padding: 5px 20px 25%;">
                 <form action="/recommendations" method='POST' >
                     <div class="select-label">Select a trail that you like. You can start typing the trail name to see options.</div>
 
                     <select name="trail" id="select_trail" class="picker">
                       <option value=''>Select a trail...</option>
                       {% for trail in trail_names|sort %}
-                      <option value="{{ trail }}">{{ trail }}</option>
+                        <option value="{{ trail }}">{{ trail }}</option>
                       {% endfor %}
                     </select>
 

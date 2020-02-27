@@ -41,7 +41,8 @@ def recommendations():
 
 @app.route('/inputs_multi', methods=['GET'])
 def inputs_multi():
-    return render_template('inputs_multi.html', df=df.iloc[:100])
+    trail_names_subset = df[df['rating_rounded']>=4.0]['name']
+    return render_template('inputs_multi.html', trail_names=trail_names_subset)
 
 
 @app.route('/recommendations_multi', methods=['GET', 'POST'])

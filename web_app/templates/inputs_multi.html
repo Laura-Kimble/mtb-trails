@@ -17,7 +17,7 @@
   </head>
 
   <body style="background-image: url('../static/images/bw_pic.jpg');
-  background-repeat: tile; background-size:contain; width:100%;">
+  background-repeat: no-repeat; background-size:cover; width:100%;">
 
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
@@ -41,17 +41,18 @@
                 <h1>Get recommendations based on multiple trails you like.</h1>
             </div>
 
-            <div style="padding: 20px 25% 20px 25%;">
+            <div style="padding: 5px 15% 20px 25%;">
                 <form action="/recommendations_multi" method='POST' >
                     <div class="select-label">Select some trails that you have ridden and like.</div>
-                    <div class="box">
-                        {% for trail_name in df['name'].unique()|sort %}
-                            <input type="checkbox" name="trail_names" value="{{trail_name}}"> <b>{{trail_name}}</b><br>
+
+                    <select multiple name="trail_names" id="select_trails" class="form-control" size="10">
+                        {% for trail in trail_names|sort %}
+                            <option name="trail_names" value="{{ trail }}">{{ trail }}</option>
                         {% endfor %}
-                    </div>
+                    </select>
 
                     <div>
-                    </br>
+                    <br>
                         <button class="button" type="submit">Show me where to shred</button> 
                     </div>
 
