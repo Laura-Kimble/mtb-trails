@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, jsonify
 import pandas as pd 
 import joblib
-import sys
-sys.path.insert(1, 'models')
+# import sys
+# sys.path.insert(1, 'models')
 # import item_recommender as ir
 # import importlib
 # importlib.reload(ir)
