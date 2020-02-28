@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import pandas as pd 
 import joblib
 import sys
-sys.path.insert(1, '../src')
+sys.path.insert(1, 'models')
 # import item_recommender as ir
 # import importlib
 # importlib.reload(ir)
@@ -13,8 +13,8 @@ def shorten_text_col(df, colname, num_chars=50):
     df[colname] = df[colname].map(lambda x: x[:num_chars]+'...' if len(x)>num_chars else x)
     return df
 
-recommender = joblib.load('../models/trail_recommender.joblib')
-df = pd.read_pickle('../data/co_trails_df')
+recommender = joblib.load('models/trail_recommender.joblib')
+df = pd.read_pickle('data/co_trails_df')
 df = shorten_text_col(df, 'description', num_chars=200)
 df = shorten_text_col(df, 'description', num_chars=200)
 display_cols = ['name', 'url', 'region_name', 'difficulty', 'length', 'rating', 'description']
@@ -41,7 +41,7 @@ def recommendations():
 
 @app.route('/inputs_multi', methods=['GET'])
 def inputs_multi():
-    trail_names_subset = df[df['rating_rounded']>=4.0]['name']
+    trail_names_subset = df[df['rating_rounded']>=4]['name']
     return render_template('inputs_multi.html', trail_names=trail_names_subset)
 
 
