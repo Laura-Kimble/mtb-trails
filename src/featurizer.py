@@ -62,7 +62,6 @@ class Featurizer(object):
             result.append(token)
         return result
 
-
     def _remove_stopwords(self, text, stopwords_list):
         result = []
         for word in text:
@@ -70,12 +69,10 @@ class Featurizer(object):
                 result.append(word)
         return result
 
-
     def _ngramize(self, text, min_count=5):
         model = Phrases(text, min_count=min_count, threshold=2)
         phraser = Phraser(model)
         return text.map(lambda x: phraser[x])
-
 
     def _get_wordnet_pos(self, word):
         tag = nltk.pos_tag([word])[0][1][0].lower()
@@ -85,11 +82,9 @@ class Featurizer(object):
                 'r': 'r'}
         return tag_dict.get(tag, 'n')
 
-
     def _lemmatize(self, text):
         pos = self._get_wordnet_pos(text)
         return WordNetLemmatizer().lemmatize(text, pos=pos)
-
 
     def _preprocess(self, text):
         result = []

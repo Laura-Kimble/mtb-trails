@@ -10,7 +10,7 @@ from featurizer import Featurizer
 
 def get_st_descriptions():
     st_df = pd.read_pickle('../data/st_trails_df_2')
-    st_df_with_desc = st_df[st_df['description_length']>=40]
+    st_df_with_desc = st_df[st_df['description_length'] >= 40]
     return st_df_with_desc['description']
 
 
@@ -38,21 +38,21 @@ if __name__ == '__main__':
     X = get_st_descriptions()
 
     # Create initial stopwords to remove before creating n-grams
-    not_stops_firstpass = ['not', 'bottom', 'few', 'many', 'more', 'less', 'most', 'least', 'never', 'off', 'out'\
+    not_stops_firstpass = ['not', 'bottom', 'few', 'many', 'more', 'less', 'most', 'least', 'never', 'off', 'out', 
                             'very', 'too', 'overly', 'so']
     new_stops_firstpass = ['br']
     first_stopwords = (STOPWORDS.difference(not_stops_firstpass)).union(new_stops_firstpass)
 
     # Create second set of stopwords to use after creating n-grams
-    my_stopwords = set(['climb', 'mountain', 'road', 'singletrack', 'loop', 'trail', 'trails',  'ride', 'area', 'route', 'way', \
-                        'feature', 'section','sections', 'riding', \
-                    'loop','br', 'mile', 'miles', 'right', 'left', 'www', 'http', 'https', 'bike', 'bikes', 'bicycle', 'bicycles', \
-                    'continue', 'rider', 'riders', 'parking', 'lot', 'turn', 'start', 'starts', 'description', 'cross', \
-                    'north', 'south', 'east', 'west', '-PRON-', 'pron', 'nee', 'regard', 'shall', 'use', 'win', \
-                    'park', 'point', 'biking', 'follow', 'single', 'track', 'intersection', 'trailhead', 'head', \
-                    'good', 'great', 'nice', 'time', 'include', 'place', 'come', 'downhill', 'look', 'near'])
-    bitri_stops = set(['parking_lot', 'trail_starts', 'mile_turn', 'north_south', 'mountain_bike', 'mountain_biking', 'single_track', \
-                    'mountain_bike_trail', 'trail_head'])
+    my_stopwords = set(['climb', 'mountain', 'road', 'singletrack', 'loop', 'trail', 'trails',  'ride', 'area', 'route', 'way', 
+                        'feature', 'section','sections', 'riding', 
+                        'loop','br', 'mile', 'miles', 'right', 'left', 'www', 'http', 'https', 'bike', 'bikes', 'bicycle', 'bicycles', 
+                        'continue', 'rider', 'riders', 'parking', 'lot', 'turn', 'start', 'starts', 'description', 'cross', 
+                        'north', 'south', 'east', 'west', '-PRON-', 'pron', 'nee', 'regard', 'shall', 'use', 'win', 
+                        'park', 'point', 'biking', 'follow', 'single', 'track', 'intersection', 'trailhead', 'head', 
+                        'good', 'great', 'nice', 'time', 'include', 'place', 'come', 'downhill', 'look', 'near'])
+    bitri_stops = set(['parking_lot', 'trail_starts', 'mile_turn', 'north_south', 'mountain_bike', 'mountain_biking', 'single_track', 
+                       'mountain_bike_trail', 'trail_head'])
     second_stopwords = my_stopwords.union(STOPWORDS).union(bitri_stops)
 
     # Gensim LDA

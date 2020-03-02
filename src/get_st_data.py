@@ -1,20 +1,20 @@
 import requests 
-import json
 import pandas as pd 
 import numpy as np 
 
+
 def get_trail_data(lat_lon_list, url, headers, radius=100, per_page=10):
-    ''' Given a list of lat/lon tuples, send an api request for each lat/lon location,
-    and return a pandas dataframe with all the response data.
+    ''' Given a list of lat/lon tuples, send an api request to singletracks.com
+     for each lat/lon location, and return a pandas dataframe with all the response data.
     '''
 
     trails_df = pd.DataFrame()
     
     for lat, lon in lat_lon_list:
-        api_params = {'lat': lat,\
-                    'lon': lon,\
-                    'radius': radius,\
-                    'per_page': per_page}
+        api_params = {'lat': lat,
+                      'lon': lon,
+                      'radius': radius,
+                      'per_page': per_page}
 
         response = get_api_response(url, headers, api_params)
 

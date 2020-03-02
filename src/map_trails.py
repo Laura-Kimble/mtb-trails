@@ -4,6 +4,7 @@ import datetime
 import folium
 from st_sklearn_nmf import get_topic_trails
 
+
 def create_multiple_dots_layers(df, base_map, layer_names, trail_names_for_layers):
     ''' Create layers on a folium map.
 
@@ -35,16 +36,16 @@ def create_dots_layer(df, base_map, layer_name, color='black'):
         color (str): Color of the dots.
     '''
 
-    feature_map = folium.FeatureGroup(name = layer_name)
+    feature_map = folium.FeatureGroup(name=layer_name)
 
     for i, row in df.iterrows():
         folium.CircleMarker(location=(row['lat'], row['lon']),
-                                    radius=1.5,
-                                    color=color,
-                                    popup=str(row['name'] \
-                                              + '\n\nDifficulty: '+ str(row['difficulty']) \
-                                             ),
-                                    fill=True).add_to(feature_map)
+                            radius=1.5,
+                            color=color,
+                            popup=str(row['name'] 
+                                      + '\n\nDifficulty: ' + str(row['difficulty']) 
+                                     ),
+                            fill=True).add_to(feature_map)
 
     base_map.add_child(feature_map)
 
@@ -61,7 +62,6 @@ if __name__ == '__main__':
     base_map = folium.Map(location=[39.73782,-98],
                             zoom_start=5,
                             tiles="Cartodbpositron")
-
 
     # Create map layers
     create_multiple_dots_layers(st_df, base_map, topic_names, top_topic_trails)

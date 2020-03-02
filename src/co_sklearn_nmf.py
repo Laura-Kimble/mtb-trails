@@ -7,20 +7,24 @@ from mtb_sklearn_lda import make_vectorizer, transform_vectorizer, get_top_words
 from st_sklearn_nmf import print_top_topic_words, print_topic_trails, fit_nmf
 import matplotlib.pyplot as plt
 
+
 def get_co_descriptions():
     st_df = pd.read_pickle('../data/co_trails_df')
     st_df_with_desc = st_df[st_df['description_length']>=40]
     return st_df_with_desc['description']
+
 
 def get_co_trail_names():
     st_df = pd.read_pickle('../data/co_trails_df')
     st_df_with_desc = st_df[st_df['description_length']>=40]
     return st_df_with_desc['name']
 
+
 def get_co_regions():
     st_df = pd.read_pickle('../data/co_trails_df')
     st_df_with_desc = st_df[st_df['description_length']>=40]
     return st_df_with_desc['region_name']
+
 
 def get_co_index():
     st_df = pd.read_pickle('../data/co_trails_df')
@@ -47,14 +51,14 @@ if __name__ == '__main__':
     X = get_co_descriptions()
 
     # Create  set of stopwords to use 
-    my_stopwords = set(['climb', 'mountain', 'road', 'singletrack', 'loop', 'trail', 'trails',  'ride', 'area', 'route', 'way', \
-                        'feature', 'section','sections', 'riding', 'll', 'rd', 'going', 'stay', \
-                    'loop','br', 'mile', 'miles', 'right', 'left', 'www', 'http', 'https', 'bike', 'bikes', 'bicycle', 'bicycles', \
-                    'continue', 'rider', 'riders', 'parking', 'lot', 'turn', 'start', 'starts', 'description', 'cross', \
-                    'north', 'south', 'east', 'west', '-PRON-', 'pron', 'nee', 'regard', 'shall', 'use', 'win', \
-                    'park', 'point', 'biking', 'follow', 'single', 'track', 'intersection', 'trailhead', 'head', \
-                    'good', 'great', 'nice', 'time', 'include', 'place', 'come', 'downhill', 'look', 'near'])
-    bitri_stops = set(['parking_lot', 'trail_starts', 'mile_turn', 'north_south', 'mountain_bike', 'mountain_biking', 'single_track', \
+    my_stopwords = set(['climb', 'mountain', 'road', 'singletrack', 'loop', 'trail', 'trails',  'ride', 'area', 'route', 'way', 
+                        'feature', 'section','sections', 'riding', 'll', 'rd', 'going', 'stay', 
+                        'loop','br', 'mile', 'miles', 'right', 'left', 'www', 'http', 'https', 'bike', 'bikes', 'bicycle', 'bicycles', 
+                        'continue', 'rider', 'riders', 'parking', 'lot', 'turn', 'start', 'starts', 'description', 'cross', 
+                        'north', 'south', 'east', 'west', '-PRON-', 'pron', 'nee', 'regard', 'shall', 'use', 'win', 
+                        'park', 'point', 'biking', 'follow', 'single', 'track', 'intersection', 'trailhead', 'head', 
+                        'good', 'great', 'nice', 'time', 'include', 'place', 'come', 'downhill', 'look', 'near'])
+    bitri_stops = set(['parking_lot', 'trail_starts', 'mile_turn', 'north_south', 'mountain_bike', 'mountain_biking', 'single_track', 
                     'mountain_bike_trail', 'trail_head'])
     all_stopwords = my_stopwords.union(STOPWORDS).union(bitri_stops)
 
@@ -86,8 +90,6 @@ if __name__ == '__main__':
     joblib.dump(nmf, '../models/co_nmf_model.joblib')
     joblib.dump(tfidf_vect, '../models/co_tfidf_vec.joblib')
 
-    # W_df = pd.DataFrame(W, index=trail_names, columns=topics)
-    # H_df = pd.DataFrame(H, index=topics, columns=feature_names)
     W_df.to_pickle('../models/co_W_df')
     H_df.to_pickle('../models/co_H_df')
 

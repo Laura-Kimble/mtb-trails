@@ -10,13 +10,13 @@ import matplotlib.pyplot as plt
 
 def get_st_trail_names():
     st_df = pd.read_pickle('../data/st_trails_df_2')
-    st_df_with_desc = st_df[st_df['description_length']>=40]
+    st_df_with_desc = st_df[st_df['description_length'] >= 40]
     return st_df_with_desc['name']
 
 
 def get_st_regions():
     st_df = pd.read_pickle('../data/st_trails_df_2')
-    st_df_with_desc = st_df[st_df['description_length']>=40]
+    st_df_with_desc = st_df[st_df['description_length'] >= 40]
     return st_df_with_desc['region']
 
 
@@ -49,7 +49,7 @@ def get_topic_trails(W, n=10):
 
 
 def fit_nmf(mat, n_topics, alpha=0.):
-    nmf = NMF(n_components = n_topics, alpha=alpha)
+    nmf = NMF(n_components=n_topics, alpha=alpha)
     nmf.fit(mat)
     W = nmf.transform(mat)
     H = nmf.components_
@@ -62,15 +62,15 @@ if __name__ == '__main__':
     X = get_st_descriptions()
 
     # Create  set of stopwords to use 
-    my_stopwords = set(['climb', 'mountain', 'road', 'singletrack', 'loop', 'trail', 'trails',  'ride', 'area', 'route', 'way', \
-                        'feature', 'section','sections', 'riding', 'll', 'rd', 'going', 'stay', \
-                    'loop','br', 'mile', 'miles', 'right', 'left', 'www', 'http', 'https', 'bike', 'bikes', 'bicycle', 'bicycles', \
-                    'continue', 'rider', 'riders', 'parking', 'lot', 'turn', 'start', 'starts', 'description', 'cross', \
-                    'north', 'south', 'east', 'west', '-PRON-', 'pron', 'nee', 'regard', 'shall', 'use', 'win', \
-                    'park', 'point', 'biking', 'follow', 'single', 'track', 'intersection', 'trailhead', 'head', \
-                    'good', 'great', 'nice', 'time', 'include', 'place', 'come', 'downhill', 'look', 'near'])
-    bitri_stops = set(['parking_lot', 'trail_starts', 'mile_turn', 'north_south', 'mountain_bike', 'mountain_biking', 'single_track', \
-                    'mountain_bike_trail', 'trail_head'])
+    my_stopwords = set(['climb', 'mountain', 'road', 'singletrack', 'loop', 'trail', 'trails',  'ride', 'area', 'route', 'way', 
+                        'feature', 'section','sections', 'riding', 'll', 'rd', 'going', 'stay', 
+                        'loop','br', 'mile', 'miles', 'right', 'left', 'www', 'http', 'https', 'bike', 'bikes', 'bicycle', 'bicycles', 
+                        'continue', 'rider', 'riders', 'parking', 'lot', 'turn', 'start', 'starts', 'description', 'cross', 
+                        'north', 'south', 'east', 'west', '-PRON-', 'pron', 'nee', 'regard', 'shall', 'use', 'win', 
+                        'park', 'point', 'biking', 'follow', 'single', 'track', 'intersection', 'trailhead', 'head', 
+                        'good', 'great', 'nice', 'time', 'include', 'place', 'come', 'downhill', 'look', 'near'])
+    bitri_stops = set(['parking_lot', 'trail_starts', 'mile_turn', 'north_south', 'mountain_bike', 'mountain_biking', 'single_track', 
+                       'mountain_bike_trail', 'trail_head'])
     all_stopwords = my_stopwords.union(STOPWORDS).union(bitri_stops)
 
     # Create TF-IDF matrix
@@ -86,8 +86,6 @@ if __name__ == '__main__':
     topics = ['topic_{}'.format(i) for i in range(k)]
 
     nmf, W, H = fit_nmf(tfidf, n_topics=k, alpha=0.)
-    W_df = pd.DataFrame(W, index=trail_names, columns=topics)
-    H_df = pd.DataFrame(H, index=topics, columns=feature_names)
     print(f'reconstruction error: {nmf.reconstruction_err_:0.3}')
 
     print_top_topic_words(H, feature_names, n=10)

@@ -2,6 +2,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
 import numpy as np
 
+
 class ItemRecommender():
     '''
     Content based item recommender
@@ -12,7 +13,7 @@ class ItemRecommender():
     
     def fit(self, X, trail_names, trail_ids):
         '''
-        Takes a numpy array of the item attributes and creates the similarity matrix
+        Takes a numpy array of the item attributes and creates similarity matrix
 
         INPUT -
             X: NUMPY ARRAY - Rows are items, columns are feature values
@@ -29,7 +30,7 @@ class ItemRecommender():
 
         if self.similarity_measure:
             similarity_matrix = self.similarity_measure(X)
-        else: # if similarity measure not specified (None), use cosine similarity
+        else:  # if similarity measure not specified (None), use cosine similarity
             similarity_matrix = cosine_similarity(X)
         self.similarity_matrix = similarity_matrix
 
@@ -37,13 +38,12 @@ class ItemRecommender():
     def get_recommendations(self, item, n=5):
         '''
         Returns the top n items related to the item passed in
+
         INPUT:
             item    - STRING - Name of item in the original DataFrame 
             n       - INT    - Number of top related items to return 
         OUTPUT:
             items, item_ids - Lists of the top n related item names, and the similar item ids
-
-        For a given item find the n most similar items to it (this can be done using the similarity matrix created in the fit method)
         '''
 
         if item not in self.trail_names:
@@ -60,17 +60,14 @@ class ItemRecommender():
 
     def get_user_profile(self, items):
         '''
-        Takes a list of items and returns a user profile. A vector representing the likes of the user.
+        Takes a list of items and returns a user profile: A vector representing the likes of the user.
+        
         INPUT: 
             items  -   LIST - list of trail names the user likes/has ridden
 
         OUTPUT: 
             user_profile - NP ARRAY - array representing the likes of the user 
                     The columns of this will match the columns of the trained on matrix
-    
-
-        Using the list of items liked by the user create a profile which will be a 1 x number of features array. 
-         This should be the addition of the values for all liked item features (you can choose how to normalize if you think it is needed)
         '''
         item_indices = []
         for item in items:
@@ -91,12 +88,9 @@ class ItemRecommender():
 
         OUTPUT 
             results - LIST - n recommended items
-    
-        Make use of the get_user_profile method to create a user profile that will be used to get the similarity to all items 
-        and recommend the top n.
         '''
         user_profile = self.get_user_profile(items)
-        y = np.repeat(user_profile.reshape(1,- 1), self.X.shape[0], axis=0) 
+        y = np.repeat(user_profile.reshape(1, - 1), self.X.shape[0], axis=0) 
         similarities = self.similarity_measure(self.X, y)[:, 0]
         results = []
         for i in range(1, len(self.trail_names)+1):

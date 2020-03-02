@@ -24,7 +24,7 @@ def make_vectorizer(contents, tf_idf=False, lemmatize=False, **kwargs):
     if lemmatize:
         tokenizer = tokenize
     else:
-        tokenizer=None
+        tokenizer = None
 
     vectorizer_model = Vectorizer(tokenizer=tokenizer, **kwargs)
     vectorizer_model.fit(contents)
@@ -66,8 +66,8 @@ if __name__ == '__main__':
     # Update stopwords
     nltk_stopwords = set(stopwords.words('english'))
     gensim_stopwords = STOPWORDS
-    my_stopwords = set(['singletrack', 'loop', 'trail', 'trails',  'ride', 'area', 'route', 'way', 'feature', 'section', 'riding'\
-                    'north', 'south', 'east', 'west', '-PRON-', 'pron', 'nee', 'regard', 'shall', 'use', 'win'])
+    my_stopwords = set(['singletrack', 'loop', 'trail', 'trails',  'ride', 'area', 'route', 'way', 'feature', 'section', 'riding', 
+                        'north', 'south', 'east', 'west', '-PRON-', 'pron', 'nee', 'regard', 'shall', 'use', 'win'])
     all_stopwords = my_stopwords.union(nltk_stopwords.union(gensim_stopwords))
 
     # Create TF matrix

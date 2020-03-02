@@ -1,22 +1,21 @@
 import requests 
-import json
 import pandas as pd 
 import numpy as np 
 from math import sin, cos, sqrt, atan2, radians
 
 
 def get_trail_data(lat_lon_list, url, headers, radius=100, per_page=10):
-    ''' Given a list of lat/lon tuples, send an api request for each lat/lon location,
-    and return a pandas dataframe with all the response data.
+    ''' Given a list of lat/lon tuples, send an api request to singletracks.com
+     for each lat/lon location, and return a pandas dataframe with all the response data.
     '''
 
     trails_df = pd.DataFrame()
     
     for i, (lat, lon) in enumerate(lat_lon_list):
-        api_params = {'lat': lat,\
-                    'lon': lon,\
-                    'radius': radius,\
-                    'per_page': per_page}
+        api_params = {'lat': lat,
+                      'lon': lon,
+                      'radius': radius,
+                      'per_page': per_page}
 
         response = get_api_response(url, headers, api_params)
 
@@ -44,6 +43,7 @@ def append_response_to_df(df, response, region_index):
         df = df.append(df_row, ignore_index=True)
     return df
 
+
 def create_derived_cols(df):
     df['length_rounded'] = df['length'].apply(lambda x: np.round(float(x), 0))
     df['rating_rounded'] = df['rating'].apply(lambda x: np.round(float(x), 1))
@@ -60,11 +60,12 @@ def create_derived_cols(df):
     df['Lift_service'] = df['features'].map(lambda x: 'Lift' in x)
     return df
 
+
 def calc_dist_to_Denver_km(lat, lon):
 
     # approximate radius of earth in km
     R = 6373.0
-    lat1 = radians(39.7392) # Denver
+    lat1 = radians(39.7392)  # Denver
     lon1 = radians(-104.9903)
     lat2 = radians(lat) 
     lon2 = radians(lon)
