@@ -37,7 +37,7 @@ class ItemRecommender():
         
     def get_recommendations(self, item, n=5):
         '''
-        Returns the top n items related to the item passed in
+        Returns the top n items related to the item passed in.
 
         INPUT:
             item    - STRING - Name of item in the original DataFrame 

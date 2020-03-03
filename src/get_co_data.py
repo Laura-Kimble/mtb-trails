@@ -54,7 +54,15 @@ def create_derived_cols(df):
 
     region_dict = {0: "Pueblo", 1: 'Denver', 2: 'Grand Junction', 3: 'Cortez', 4: "Vail", 5: "South Fork", 6: 'Steamboat'}
     df['region_name'] = df['region_num'].map(lambda x: region_dict[x])
+
+    km_to_miles = 0.621371
     df['dist_to_Denver_km'] = df.apply(lambda row: calc_dist_to_Denver_km(np.float(row['lat']), np.float(row['lon'])), axis=1)
+    df['dist_to_Denver_mi'] = df['dist_to_Denver_km'] * km_to_miles
+    df['dist_to_Denver_mi_bucket'] = df['dist_to_Denver_mi'].\
+        map(lambda x: '0-50 miles' if x<=50 \
+                else '50-100 miles' if x<=100 \
+                else '100-200 miles' if x<=200 \
+                else '200+ miles')
 
     df['Pump_track'] = df['features'].map(lambda x: 'Pump' in x)
     df['Lift_service'] = df['features'].map(lambda x: 'Lift' in x)

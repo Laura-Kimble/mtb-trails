@@ -103,7 +103,7 @@ if __name__ == '__main__':
     rand_trail = choice(trail_names)
     recco_trails, recco_trail_ids = trail_recommender.get_recommendations(rand_trail, n=15)
 
-    filter_criteria_dict = {'difficulty': ['intermediate', 'advanced']}
+    filter_criteria_dict = {'dist_to_Denver_mi_bucket': ['0-50 miles', '50-100 miles']}
     filtered_names, filtered_ids = filter_reccos(recco_trails, recco_trail_ids, filter_criteria_dict, st_df_with_desc)
     print(f'Your trail is {rand_trail}:\n\n')
     print(f'Similar trails are:\n{recco_trails}\n\n')
