@@ -31,6 +31,9 @@
           <li class="nav-item">
                 <a class="nav-link" href="/inputs_multi">From Multiple Trails</a>
           </li>
+          <li class="nav-item">
+              <a class="nav-link" href="/about">About</a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -43,6 +46,7 @@
 
             <div style="padding: 5px 20px 25%;">
               <div class="box">
+                <br>
                 <form action="/recommendations" method='POST' >
                     <div class="select-label">Select a trail that you like. You can start typing the trail name to see options.</div>
 
@@ -52,7 +56,7 @@
                         <option value="{{ trail }}">{{ trail }}</option>
                       {% endfor %}
                     </select>
-                    <br></br>
+                    <br><br>
                       
                     <div class="select-label">Optional: Select a maxium distance from Denver for trail recommendations.</div>
 
@@ -82,8 +86,9 @@
                                 id = "under25"
                                 value = "0-25 miles" />
                         <label for = "under25">Less than 25 miles </label>
+                        <br><br>
                 </div>
-
+                <br>
                     <div>
                     </br>
                         <button class="button" type="submit">Show me where to shred</button> 

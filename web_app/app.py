@@ -30,10 +30,12 @@ display_cols = ['name', 'url', 'region_name', 'difficulty', 'length', 'rating', 
 def index():
     return render_template('index.html')
 
+
 @app.route('/inputs', methods=['GET'])
 def inputs():
     trail_names = recommender.trail_names
     return render_template('inputs.html', trail_names=trail_names)
+
 
 @app.route('/recommendations', methods=['GET', 'POST'])
 def recommendations():
@@ -62,6 +64,11 @@ def recommendations_multi():
     user_reccos = recommender.get_user_recommendation(liked_trails, n=10)
     reccos_df = df[df['name'].map(lambda x: x in user_reccos)][display_cols]
     return render_template('recommendations_multi.html', reccos_df=reccos_df)
+
+
+@app.route('/about', methods=['GET'])
+def about():
+    return render_template('about.html')
 
 
 if __name__ == '__main__':

@@ -25,13 +25,13 @@
           <li class="nav-item">
             <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" href="/inputs">From One Trail</a>
           </li>
           <li class="nav-item">
-                <a class="nav-link" href="/inputs_multi">From Multiple Trails</a>
+              <a class="nav-link" href="/inputs_multi">From Multiple Trails</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item active">
               <a class="nav-link" href="/about">About</a>
           </li>
         </ul>
@@ -39,57 +39,37 @@
     </nav>
 
     <main role="main" class="container">
-        <div class="starter-template">
-            <div class="page-header">
-                <h1>Recommendations</h1>
+            <div class="page-header" style="padding: 15px 15px;">
+                <h1>About this project</h1>
             </div>
 
-            <div class="select-label">Your Trail</div>
-            <table class='table'>
-                <tr>
-                <th>NAME</th>
-                {% for col in trail_df.columns[2:] %}
-                <th>{{col.upper().replace('_', ' ')}}</th>
-                {% endfor %}
-                </tr>
-                {% for _, row in trail_df.iterrows() %}
-                <tr>
-                    <td> <a href = {{row.url}} target="_blank">{{row['name']}}</a> </td>
-                    {% for entry in row[2:] %}
-                    <td>{{ entry }}</td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </table>
-            <p></p>
-
-            <div class="select-label">Trail Recommendations</div>
-            <table class='table'>
-                <tr>
-                <th>NAME</th>
-                {% for col in reccos_df.columns[2:] %}
-                <th>{{ col.upper().replace('_', ' ') }}</th>
-                {% endfor %}
-                </tr>
-                {% for _, row in reccos_df.iterrows() %}
-                <tr>
-                    <td> <a href = {{row.url}} target="_blank">{{row['name']}}</a> </td>
-                    {% for entry in row[2:] %}
-                    <td>{{ entry }}</td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </table>
-
-            <div style="text-align: center">
-                <form action="/inputs" method='GET' >
-                    <button class="button" type="submit">Try another trail</button> 
-                </form>
+            <div class="box">
+              <div>
+                The data on this website and used to build the recommender is from www.singletracks.com, obtained through their public API.  
+                I extracted the trail data using the API, then used Python (pandas, numpy, sklearn, spacy) to process, analyze and model the data.  
+                I used natural language processing (NLP) and clustering techniques on the trail descriptions to extract latent topics describing trails.  
+                I used these topics along with additional trail features (length, difficulty, star rating, etc.) 
+                to find the similar trails to a given trail to build the recommender.  
+                This web app is built using Flask and a Bootstrap starter template.
+                <br><br>
+                For more information on this project, you can visit my 
+                <a style="font-weight: bold;" href=https://github.com/Laura-Kimble/mtb-trails target="_blank">github project page</a>.
+                <br><br>
+              </div>
+              <div style="font-weight: bold;">
+                Contact Info:
+              </div>
+              <div>
+                  Laura.E.Detwiler@gmail.com <br>
+                  215-518-7135 <br>
+                  LinkedIn: <a href="https://www.linkedin.com/in/lauraekimble/" target="_blank">/lauraekimble</a><br>           
+                  Github: <a href="https://github.com/Laura-Kimble" target="_blank">/Laura-Kimble</a>
+              </div>
             </div>
+
 
             <div class="view" >
             </div>
-        </div>
     </main><!-- /.container -->
 
     <!-- Bootstrap core JavaScript
