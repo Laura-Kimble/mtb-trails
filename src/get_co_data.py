@@ -59,7 +59,8 @@ def create_derived_cols(df):
     df['dist_to_Denver_km'] = df.apply(lambda row: calc_dist_to_Denver_km(np.float(row['lat']), np.float(row['lon'])), axis=1)
     df['dist_to_Denver_mi'] = df['dist_to_Denver_km'] * km_to_miles
     df['dist_to_Denver_mi_bucket'] = df['dist_to_Denver_mi'].\
-        map(lambda x: '0-50 miles' if x<=50 \
+        map(lambda x: '0-25 miles' if x<=25 \
+                else '25-50 miles' if x<=50 \
                 else '50-100 miles' if x<=100 \
                 else '100-200 miles' if x<=200 \
                 else '200+ miles')

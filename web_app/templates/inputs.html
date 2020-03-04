@@ -42,6 +42,7 @@
             </div>
 
             <div style="padding: 5px 20px 25%;">
+              <div class="box">
                 <form action="/recommendations" method='POST' >
                     <div class="select-label">Select a trail that you like. You can start typing the trail name to see options.</div>
 
@@ -51,6 +52,37 @@
                         <option value="{{ trail }}">{{ trail }}</option>
                       {% endfor %}
                     </select>
+                    <br></br>
+                      
+                    <div class="select-label">Optional: Select a maxium distance from Denver for trail recommendations.</div>
+
+                        <input type = "radio"
+                              name = "maxDist"
+                              id = "anyDist"
+                              value = "200+ miles"
+                              checked = "checked" />
+                        <label for = "anyDist">Any Distance </label>
+                        <input type = "radio"
+                                name = "maxDist"
+                                id = "under200"
+                                value = "100-200 miles" />
+                        <label for = "under200">Less than 200 miles </label>
+                        <input type = "radio"
+                                name = "maxDist"
+                                id = "under100"
+                                value = "50-100 miles" />
+                        <label for = "under100">Less than 100 miles </label>
+                        <input type = "radio"
+                                name = "maxDist"
+                                id = "under50"
+                                value = "25-50 miles" />
+                        <label for = "under50">Less than 50 miles </label>
+                        <input type = "radio"
+                                name = "maxDist"
+                                id = "under25"
+                                value = "0-25 miles" />
+                        <label for = "under25">Less than 25 miles </label>
+                </div>
 
                     <div>
                     </br>
