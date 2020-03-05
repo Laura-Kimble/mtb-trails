@@ -45,9 +45,11 @@ def recommendations():
         return 'You must select a trail.'
     recco_names, recco_ids = recommender.get_recommendations(trail, n=5)
     filtered_ids = filter_on_distance(recco_ids, max_distance, df)
+    other_ids = [trail_id for trail_id in recco_ids if trail_id not in filtered_ids]
     trail_df = df[df['name']==trail][display_cols]
     reccos_df = df[df['id'].map(lambda x: x in filtered_ids)][display_cols]
-    return render_template('recommendations.html', trail_df=trail_df, reccos_df=reccos_df)
+    other_reccos_df = df[df['id'].map(lambda x: x in other_ids)][display_cols]
+    return render_template('recommendations.html', trail_df=trail_df, reccos_df=reccos_df, other_reccos_df=other_reccos_df)
 
 
 @app.route('/inputs_multi', methods=['GET'])
