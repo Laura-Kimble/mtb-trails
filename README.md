@@ -1,10 +1,11 @@
-# Discovering Mountain Bike Trail Topics
+# Show Me Where to Shred: MTB Trail Recommender
 
-### *Help me find more fast, flowy trails! Uncovering trail attributes from mountain bike trail descriptions.*
+I love mountain biking.  I love riding a fast, smooth, flowy trail with great berms and a few technical sections, and when I find a trail like that I think, "Where can I find more trails like this one?!"  If only there was a way to use the trail descriptions along with additional trail attributes, found on popular mountain biking trail apps/sites, to help riders find trails similar to their favorite(s)!
 
-I love mountain biking.  I love riding a fast, smooth, flowy trail with great berms and a few technical sections, and when I find a trail like that I think, "Where can I find more trails like this one?!"  If only there was a way to use the trail descriptions on popular mountain biking trail apps/sites to uncover "topics", or trail attributes, that can describe the trail succintly and help users to find similar trails...
+The goal of this project was to build a recommender using trail descriptions and characteristics, to recommend trails similar to a rider’s favorite(s).  There were two main components of this project:
 
-The goal of this project is to uncover latent topics in trail descriptions, i.e., find if there are underlying trail attributes like flowy, technical, scenic, etc. that show up in the description text, that can be used to describe and group trails.  Using trail descriptions from popular mtb trail websites, I used a variety of NLP and soft clustering techniques to find “topics” that can better describe the type of trail.  I then looked at the top words for each topic, as well as the top trails and their locations in each topic, to get a better sense of what the topics conveyed.
+1. **Description Topics:** Using Natural Language Processing (NLP), analyze the trail descriptions to uncover “topics” describing the trails.  I.e., find if there are underlying trail attributes like flowy, technical, scenic, etc. that show up in the description text, that can be used to describe and group trails.
+2. **Trail Recommender:** Build a content-based recommender using the description topics from above, along with additional trail features (length, difficulty, star rating, etc.), to find trails most similar to a rider's favorites.  The last step was to productize the recommender in a Flask web app.
 
      
 <div style="text-align:center"><img src="images/mtb_pic.jpg" width="1000"/></div>
@@ -13,269 +14,158 @@ The goal of this project is to uncover latent topics in trail descriptions, i.e.
   
 ## Data
 
-The websites <a href="https://www.mtbproject.com">mtbproject.com</a> and <a href="https://www.singletracks.com">singletracks.com</a> both have mountain biking trail
-data available through their APIs, that includes the trail name, location, difficulty, star rating, length in miles, and a short summary description of the trail.  To start, I chose to use data from mtbproject since it's the site/app I'm more familiar with.  However, the trail summaries on mtbproject are very short (usually one short sentence), which I found did not yield a lot of useful information (more on that later).  So I switched to using the data from singletracks since the descriptions were several sentences/paragraphs that yielded more information for NLP and finding topics.  The "ABOUT THIS TRAIL" section is the description, and can be acccessed (along with the additional trail data fields) through the singletracks API.
+The website <a href="https://www.singletracks.com">singletracks.com</a> has mountain biking trail information on thousands of trails in the U.S.  The trail data is available through their API, and includes the trail name, location, difficulty, star rating, length in miles, and a short summary description of the trail.  I had also considered using trail data from mtbproject.com, another similar mountain biking trail website that I use often, but the trail descriptions provided through their API were very short (the average description length was 56 characters), and so did not provide sufficient data for robust natural language processing.
+
 
 <p align="center"><img src="images/singletracks_trail_example.png" width="600"/></p>
 </br>
   
-I chose 10 select locations in the US that have a lot of moutain bike trails nearby, based on my previous knowledge and looking at a map of all US trails.  I also chose locations that were spread across different geographical regions in the country.
-
-- Portland
-- Denver
-- Moab
-- Pittsburgh
-- Los Angeles
-- Bellingham WA
-- Boise
-- Atlanta
-- Little Rock
-- Grand Rapids
-
-
-I used the API to get data on 100 trails within a 100 mile radius of each location, to get 1000 total trails (the maximum number the API allows per day for free).
-The API returns json with the following format:
+For the recommender, I chose to use data on trails in the Colorado area.  I used the API to get data for 1200 trails in Colorado and the surrounding area.  The API returns json with the following format:
 
 <div style="text-align:center"><img src="images/st_json_example.png" width="1000"/></div>
 
-To explore and model the data, I converted this into a pandas dataframe and added a column for 'length of description'.
+To explore and model the data, I converted the json data into a pandas dataframe, and added several columns for 'length of description', 'distance to Denver', and several others not shown.
 
-<div style="text-align:center"><img src="images/st_df_example.png" width="1200"/></div>
+<div style="text-align:center"><img src="images/co_st_df_example.png" width="1200"/></div>
 
 </br>
-The description field is the focus of this project, but the other fields such as trail location, difficulty, etc provide useful information for exploratory data analysis and comparing topic clusters.
+
 
 ## EDA
 
+To begin with, I performed some initial EDA, to get a sense of the trail data and features.
 A few observations on the general features:
 
 A look at the distribution of difficulty ratings shows that the largest portion of trails are intermediate.  
 
-<p align="center"><img src="images/st_Trails_by_difficulty_ordered.png" width="600"/></p>  
+<p align="center"><img src="images/co_Trails_by_difficulty_ordered.png" width="600"/></p>  
   
 </br>
 The majority of trails are under 10 miles long, but there are a number of longer trails including the longest trail at 140 miles (not shown on chart).
 
 </br>
 </br>
-<p align="center"><img src="images/st_trails_by_length.png" width="600"/></p>
-  
-</br>
-The average star ratings are unsuprisingly grouped around the 3-5 star range, when they have a rating (not 0).
+<p align="center"><img src="images/co_trails_by_length.png" width="600"/></p>
 
 </br>
-</br>
-<p align="center"><img src="images/st_Trails_by_stars.png" width="600"/></p>
 
 </br>
+Taking a look at the number of characters in each description, we see that there is a wide range, from under 40 characters to over 1400.
+</br>
+</br>
+<p align="center"><img src="images/co_description_length.png" width="600"/></p>
+
+</br>
+
 Since I'm interested in the words in the descriptions, a general word cloud shows the most frequent words (with general stopwords removed, but before removing the 'mountain bike specific' stopwords I used for the topic modeling.)
 </br>
 </br>
 
-<div style="text-align:center"><img src="images/st_wordcloud1.png" width="800"/></div>
+<div style="text-align:center"><img src="images/co_wordcloud1.png" width="800"/></div>
 
 </br>
 
-## Featuratization & Modeling
+## Uncovering Topics in Trail Descriptions with NLP
 
-### mtbproject Descriptions
+The first part of the project involved the trail description text, using Natural Language Processing and soft clustering methods to uncover latent topics that are used to describe the trails and surrounding areas.  As you can see above, each trail description is a short paragraph describing the trail.  It may include what to expect while riding, types of obstacles, directions to follow as you ride the trail, tips, scenery in the area, other activities, and general information about the trail/ride/area.
 
-As mentioned above, I first used descriptions from mtbproject.com even though the descriptions were quite short.  I used sklearn's CountVectorizer along with a custom tokenizer that used spacy lemmatization, and a custom set of stopwords that added some domain-specific stopwords to the basic English stopwords.  Added stopwords included 'singletrack', 'loop', 'trail', and 'ride', among others.
+#### Processing & Featurization:
 
-Before trying any topic modeling on the data, I ran PCA with 2 components on a TF-IDF matrix of the descriptions in order to create a 2D plot to see if there is any cluster differentiation.  This plot shows that there does seem to be some differentation in the data, and that the trail difficulty corresponds with where the descriptions fall on the two PCA components, with green and green-blue trails appearing more in the left and lower-left area, and more difficult trails appearning more in the lower right area.
-
-<p align="center"><img src="images/PCA_difficulty.png" width="600"/></p>
-
-</br>
-Since I'm looking for topics, and presuppose that a trail description may contain more than one topic, I then used soft clustering approaches to uncover topics.  I trained an LDA model (using sklearn's LatentDirichletAllocation), with varying parameters.  I found the 'best' set of topics using just 3 topics, with a document-topic prior and word-topic prior of 0.9.  It seems likely that with such short descriptions, it would be difficult to find much more than 3 useful topics.
-
-</br>
-</br>
-
-**Topic 0:**
-['climb' 'park' 'descent' 'fun' 'steep' 'ridge' 'fast' 'climbs' 'long'
-'scenic']
-
-**Topic 1:**
-['great' 'road' 'creek' 'views' 'short' 'lake' 'nice' 'doubletrack'
-'access' 'connector']
-
-**Topic 2:**
-['fun' 'technical' 'downhill' 'mountain' 'good' 'flowy' 'rock' 'fast'
-'flow' 'rocky']
-
-**Model perplexity:** 596.7
-
-
-</br>
-These make some sense; topic 0 seems to describe more difficult trails that may be steep, fast, and long.  Topic 1 seems like easier, more connector-like trails with words like 'road', 'doubletrack', 'short', and 'access'.  Topic 2 also looks like more difficult, technical trails that may be rocky.
-
-</br>
-I also generated topics from this data using gensim's bag-of-words vectorization and gensim LDA, using similar parameters, in order to get the topic visualization provided by gensim.  While the topics/words are not identical to sklearn's, the visualization of 3 topics does show differentiation.
-</br>
-
-</br>
-<div style="text-align:center"><img src="images/mtb_gensim_lda_vis.png" width="800"/></div>
-
-</br>
-</br>
-Ultimately however, the short descriptions on mtbproject did not produce enough useful information for infomrative topics.  A comparison of the description length between mtbproject.com and singletracks.com shows that the singletracks descriptions contain much more information.
-</br>
-</br>
-
-<p align="center"><img src="images/description_length.png" width="500"/></p>
-<p align="center"><img src="images/st_description_length.png" width="500"/></p> 
-
-### Singletracks Descriptions
-
-With the longer descriptions to work with using the singletracks.com data, I was able to do some more featurization and get some more topics.  First, I removed desciptions with fewer than 40 characters from my dataset, since these contain little information and included gems such as "Fun sandy areas though", and the succinct "epic".
-
-#### Featurization:
-
-I created a custom class and methods to featurize my descriptions.  After trying various combinations of stopwords, n-grams, and lemmatization/stemming methods, I found that the following seemed to work the best on my dataset to generate meaningful tokens for successful topic modeling.  The general process is:
+First, I removed trails where the description had fewer than 40 characters since they didn't have much information (blank description or very short, e.g., "Epic ride").  This left me with 1188 trails out of the original 1200.  Next, I created a custom class and methods to featurize my descriptions.  After trying various combinations of stopwords, n-grams, and lemmatization/stemming methods, I found that the following seemed to work the best on my dataset to generate meaningful tokens for successful topic modeling.  The general process is:
 - Tokenize sentences into words (removing punctuation and converting to lowercase)
 - Remove the first set of stopwords, that are not be included in the bigrams and trigrams creation.  I used a modified version of the gensim STOPWORDS that took out qualifier words like 'not', 'very', 'too', 'few' that may be useful for the bigrams/trigrams (e.g., want to keep phrases like "not too steep").
 - Create bigrams and trigrams using gensim Phrases and Phraser
 - Lemmatize using nltk WordNetLemmatizer and nltk's part-of-speech tagging.
 - Remove the second set of stopwords, including 80+ domain-specific words and bigram/trigram phrases to remove (e.g., 'parking_lot', 'mountain_bike').  
+<br>
 
-#### LDA
+<p align="center"><img src="images/NLP_process.png" width="1000"/></p>
+<br>
 
-The next step was to create a gensim bag-of-words and try out some LDA models.  I varied the number of topics, document-topic priors (alpha), and topic-word priors (eta) and viewed the effects on the model perplexity and topic coherence.  However, this showed a linear decrease in perplexity as the number of topics increased and a seemingly random change in coherence based on number of topics (different spikes/plot each time the models were run since I didn't use a set random state).  Varying alpha and eta produced similarly uninformative plots. 
+#### Topic Modeling
 
-<div style="text-align:center"><img src="images/st_lda_metrics_topics.png" width="1000"/></div> 
+With the processed tokens I used a "bag of words" approach, creating Term Frequency (TF) and Term Frequency-Inverse Document Frequency (TF-IDF) matrices for the various models. I tried several different clustering models to uncover topics, including Latent Dirichlet Allocation (LDA), Principal Component Analysis (PCA)
+and Non-negative matrix factorization (NMF), varying the number of topics and other hyperparameters with each.  I assessed model scores such as Perplexity (for LDA) and Reconstruction Error (for NMF), but since the goal of this step in the project was to produce human-understandable topics describing trails, I ultimatley used my judgement of the resulting topics to pick the "best" model.  Also, I plotted reconstruction error against a varying number of topics between two and thirty, but this showed a nearly perfect inverse linear relationship -- the more topics used, the smaller the error but there was no obvious "elbow", so I didn't find this very useful.
 
-</br>
-The resulting LDA model using 5 topics and the default values for alpha and eta, yielded a model with perplexity of -7.35 and a coherence score of 0.35.
-The topics I was getting however didn't seem as informative or distinct as I would like. Even though the gensim visualization showed good separation between topics, I couldn't make intuitive sense between topics and didn't find this result particulary useful.
-</br>
-</br>
+The featurization and model that I found to produce the best set of topics (subjectively), was using NMF in sklearn with 10 topics on a TF-IDF matrix, using all stopwords including biking-specific words, no lemmatization, and bigrams.  Colleagues agreed that these topics "made sense" for describing mountain biking trails.
 
-**Topic 0:**
-"foot", "steep", "creek", "little", "technical", "pas", "drop", "lake", "direction", "switchbacks"
+The diagram below shows those 10 topics; the word in each large center circle is the "top word" for that topic (i.e., word with the highest loading on that topic), and the surrounding words round out the top words for the topic.  To me, this seems like a nice set of topics; there is a "technical" topic that seems to describe the ride itself with words like "steep", "rocky", "climbs"; a "lake" topic describing other attributes of the area with "scenic", "forest", "meadows"; and a "fs" topic (stands for Forest Service) that seems to describe other types of activities beyond biking with words like "summer", "hiking", and "horseback".
 
-**Topic 1:**
-"short", "creek", "ridge", "forest", "steep", "river", "sign", "rock", "close", "open"
+<br>
+<p align="center"><img src="images/Topics.png" width="1000"/></p>
+<br>
 
-**Topic 2:**
-"hill", "creek", "ridge", "easy", "technical", "lake", "rock", "begin", "canyon", "long"
+These are the 10 topics that I used in the recommender. In this way, each trail description is represented by 10 variables ranging from 0 to 1 that convey how much of each topic is represented in that trail description.  So now we can compare similarity of trails not just by their numerical and categorical characteristics, but also by how similar their descriptions are.
 
-**Topic 3:**
-'"little", "hill", "lake", "challenge", "view", "bridge", "rock", "technical", "dirt", "valley"
+## Trail Recommender
 
-**Topic 4:**
-"river", "ridge", "small", "camp", "rock", "water", "past", "easy", "challenge", "large"
+Using the trail description topics above along with additional trail data such as length, difficutly, rating, etc., I built a content-based trail recommender.  Content-based means that the recommender finds trails most similar to a user-selected trail based on characteristics of the trail itself (vs. a collaborative recommender that assesses similarity based on what other users have liked).  I then built the recommender into a web app using Flask and a Bootstrap template, and temporarily hosted it on an AWS EC2 instance (no longer running due to cost constraints).  To use the recommender app, a user selects a trail or set of trails that they enjoy riding, optionally selects a maximum distance from Denver for their recommendations, and then receives a list of recommendations, i.e., trails that are most similar to their selections.
 
-**Perplexity:** -7.35
+<br>
+<p align="center"><img src="images/Process.png" width="1000"/></p>
+<br>
 
-**Coherence:** 0.35
+#### Feature Selection, Scaling & Weighting
 
-</br>
+I used the following trail attributes as my features for the recommender:
+- 10 trail description topics
+- Length of trail (miles)
+- Difficulty (novice, beginner, intermediate, advanced, expert)
+- Average Star Rating (0 to 5 stars)
+- Distance from Denver based on lat/lon (miles)
+- Lift Service? (Y/N)
+- Pump Track? (Y/N)
 
-#### NMF
+I chose to use the length of the trail/ride and difficulty since these convey important aspects of what a rider may want in a trail, to find similar trails.  Average user star rating is a bit unintuitive -- no one wants to ride poorly rated trails -- but if we assume that people will usually select trails with higher ratings to get recommendations from, then using star rating in the recommender will then return other highly rated trails.
 
-Lastly, I used Non-negative matrix factorization (NMF) in sklearn using the singletracks descriptions, with similar featurization.  I plotted reconstruction error against a varying number of topics between two and fourteen, but this showed a nearly perfect inverse linear relationship -- the more topics used, the smaller the error but there was no obvious "elbow", so I didn't find this very useful.
+Distance from Denver is an optional filtering criteria in the app, but is also used in the recommender since trails in a given area are usually similar to one another, and you may want recommendations near where you already ride.  In future work however, distance from Denver could be omitted from the recommender features to give more geographically diverse recommendations.
 
-After trying various parameters, the model with the most coherent topics (subjectively) seemed to be 6 topics, using all stopwords including biking-specific words, no lemmatization, and bigrams.  These topics sound distinct, and seem to categorize different types of trails and/or different topics that may be present in the description (talking about the trail/ride itself vs. other activities and things to see in the area).
+Lastly, in addition to Lift Service and Pump Track (Y/N), Singletracks.com provides information on additional trail "features" such as whether there is Night Riding, Parking Fee, Restrooms, etc.  However, the availability of restrooms or a parking fee doesn't tell you much about the trail itself or what it's like to ride it.  Having Lift Service or a Pump Track, on the other hand, does tell you a lot about the ride.  Lift service is only available at bike resorts like Vail or Keystone, and pump tracks are usually only found in bike parks like Valmont Bike Park or Ruby Hill Park.  So I chose to include these two features in my recommender and omit the others.
 
+I scaled all of the features for the recommender on a 0 to 1 scale.  Since the minimum of each feature was 0, and most were not normally distributed, I simply divided each value by the maximum of that feature rather than use a standard normalization.  The only exception to this was for Length of trail, where I used 30 miles as the maximum since the vast majority of trails are under 30 miles, but there are a few as long as 140 miles that would skew the rest of the data.
 
-**TOPICS**
+Lastly, I looked at weighting the features in the recommender.  I considered the relative subjective importance of each feature in a recommender, and obtained input from colleagues.  Ultimately, it seemed that each feature had about equal importance, and seemed to be getting "good" recommendations using equal weights, so I kept equal weightings across all features.
 
-**Topic 0:** 'ridge' 'river' 'canyon' 'steep' 'end' 'old' 'gravel' 'hill' 'valley'
-    'reach'
-
-**Topic 1:** 'creek' 'crossings' 'creek crossings' 'fisher' 'bear creek' 'lower'
-    'bear' 'steep' 'gulch' 'portion'
-
-**Topic 2:** 'provincial' 'hiking' 'swimming' 'fishing' 'acres' 'acre' 'camping'
-    'activities' 'river' 'horseback'
-
-**Topic 3:** 'lake' 'short' 'views' 'forest' 'permitted' 'hub' 'lakes' 'columbia' 'fs'
-    'helmets mandatory'
-
-**Topic 4:** 'fun' 'lots' 'little' 'technical' 'climbs' 'pretty' 'roots' 'rocks'
-    'fast' 'challenging'
-
-**Topic 5:** 'beginner' 'intermediate' 'features' 'jumps' 'advanced' 'loops'
-    'technical' 'open' 'country' 'pump'
-
-**Reconstruction Error:** 29.3
+I used cosine similarity as my distance metric to compare trail vectors.  My recommender can take a single trail as a feature vector and return the top n most similar trails as recommendations, or it can take a set of multiple trails and sum their feature vectors to return the top n most similar trails to the set of trails.  This way, a rider can get novel recommendations similar to the overall characteristics of all of the trails they like to ride (which is analogous to a user profile).
 
 
-</br>
+#### Developing a Web App
 
-**Top 10 trails in topics 0 and 1**
+For the final part of this project, I implemented my recommender in a web app using Flask and Bootstrap, and briefly deployed it on AWS EC2 (currently the app is only running locally on my machine).  I was able to share my trail recommender app with colleagues, and demo it at our capstone project showcase -- it was well received, and multiple people commented that they thought their recommendations were useful!  All of the files to run the web app, along with a Docker file and requirements.txt to build and a run a Docker container to run the app, can be found in the 'web_app' folder in this repo.
 
-*Top trails for other topics not shown for brevity.*
+The following screenshots from the web app show how the recommender works.
 
+<p align="center"><img src="images/home_ss.png" width="800"/></p>
+<br>
 
-Topic 0: | Topic 1:
------------- | -------------
-Golden Gate Canyon State Park: Colorado | West Face: Idaho
-West Bench Trail: Colorado | Deadwood Ridge Trail: Idaho
-Bear Creek Lake Park: Colorado | Bald Mountain Bike Park: Idaho
-Buckhorn Loop: California | Orchard / 5 Mile / Watchman: Idaho
-Hurkey Creek: California | Blankets Creek: Georgia
-Troy Built Trail: Colorado | Timberline to Town: Oregon
-Coopers Rock: West Virginia | Lower Hulls Gulch: Idaho
-Kokopelli Trail - Loma To Moab: Colorado | Saddle / Trail #326: Idaho
-Lewis River: Washington | Ada/Eagle Bike Park: Idaho
-Bar M Loop: Utah | Galena Lodge Trail System: Idaho | 
+To get recommendations based on one trail you like, you select a trail name from the drop-down of the ~1200 trails, and optionally select a maximum distance from Denver to filter the recommendations.
 
+<br>
+<p align="center"><img src="images/select_ss.png" width="800"/></p>
+<br>
 
-#### Mapping the Topics
+Clicking on the "Show Me Where to Shred" button then displays a summary of your top 5 recommendations, i.e., trails most similar to the one you selected.  You can click on a trail name to link to the trail page on Singletracks.com to get additional details.
 
-One thing that jumps out when looking at the top trails in each topic, is that they tend to be within a specific state/region of the country.  This folium map shows the top 50 trails for each topic, with each topic being a different color dot.  (Remember that I chose trails within a 100-mile radius of 10 locations, so the overall clusters of dots on the map are simply due to this fact.)  But the clustering of dot colors (topics) around specific regions demonstrate that trail characteristics vary a lot depending on what area of the country you're in.  This makes intuitive sense -- trails in forested areas will be more rooty, trails in areas with a lot of water will have more creeks, etc.  It's nice that the model identified topics that seem to map to different regions.
+<p align="center"><img src="images/reccos_ss_full.png" width="800"/></p>
+<br>
 
-<div style="text-align:center"><img src="images/map_all_topics.png" width="1200"/></div>
+Alternatively, you can choose multiple trails you enjoy, and get recommendations similar to a bunch of trails you like.
 
-</br>
-We can see this effect better by looking at the map for each topic individually.
-</br>
-</br>
+<p align="center"><img src="images/select_multi.png" width="800"/></p>
+<br>
 
-**Topic 0:**
-['ridge' 'river' 'canyon' 'steep' 'end' 'old' 'gravel' 'hill' 'valley' 'reach'] 
+<p align="center"><img src="images/reccos_multi.png" width="800"/></p>
+<br>
 
-<div style="text-align:center"><img src="images/map_topic0.png" width="1000"/></div>
-</br>
+Overall, I'm satisfied with the recommendations.  As you would expect, the recommended trails are similar in difficulty, length, rating, region, and description to the selected trail.  For example, if you select Oil Well Flats, an intermediate, 15 mile singletrack trail system outside of Pueblo with an average rating of 4.31, the top three recommendations are Palmer Park, Red Rock Canyon, and Lion Canyon Loop -- all intermediate, 12-15 mile singletrack rides near Pueblo with similar features, scenery, and 3.5 to 4.22 average ratings.  The description for Red Rock Canyon even says "The ride is very similar to Palmer Park".
 
-**Topic 1:**
-['creek' 'crossings' 'creek crossings' 'fisher' 'bear creek' 'lower'
-'bear' 'steep' 'gulch' 'portion']
-
-<div style="text-align:center"><img src="images/map_topic1.png" width="1000"/></div>
-</br>
-
-**Topic 2:**
-['provincial' 'hiking' 'swimming' 'fishing' 'acres' 'acre' 'camping'
-'activities' 'river' 'horseback']
-
-<div style="text-align:center"><img src="images/map_topic2.png" width="1000"/></div>
-</br>
-
-**Topic 3:**
-['lake' 'short' 'views' 'forest' 'permitted' 'hub' 'lakes' 'columbia' 'fs'
-'helmets mandatory']
-
-<div style="text-align:center"><img src="images/map_topic3.png" width="1000"/></div>
-</br>
-
-**Topic 4:**
-['fun' 'lots' 'little' 'technical' 'climbs' 'pretty' 'roots' 'rocks'
-'fast' 'challenging']
-
-<div style="text-align:center"><img src="images/map_topic4.png" width="1000"/></div>
-</br>
-
-**Topic 5:**
-['beginner' 'intermediate' 'features' 'jumps' 'advanced' 'loops'
-'technical' 'open' 'country' 'pump']
-
-<div style="text-align:center"><img src="images/map_topic5.png" width="1000"/></div>
-</br>
-
+As another example, the recommendations similar to Trestle Bike Park (Winter Park's summer mountain biking park) are Keystone Resort Bike Park, Beaver Creek Ski Resort Bike Park, Vail Mountain Bike Park, Granby Ranch Bike Park, and Snowmass Bike Park.
 
 ## Future Work
 
-Next steps would include using a distance metric like cosine distance to be able to find similar trails to a given trail.  This could then be used in a recommender to help riders find other trails they might enjoy with similar features.  Given the unique geographic spread between topics, these results might also help inform riders about which areas of the country they might enjoy going to, depending their preferred riding style and what other activities/features in the area they might be interested in.
+There are several ways that the trail recommender could be enhanced, with the incorporation of additional data:
+
+1. Include trails in regions beyond Colorado, to include the rest of the U.S. (and perhaps internationally)
+2. Include additional trail data such as ascent/descent (vertical feet), which was not available through the Singletracks.com API.  This could be obtained either through webscraping the Singletracks.com website, and/or through the API of another popular mountain biking website, mtbproject.com, that provides this data.  The magnitude of a trail's ascent conveys how much climbing a rider has to do, and the descent is how much downhill a rider gets to enjoy, which are salient features in any ride.  Also, the ascent/descent compared to the total length of trail provides information on the trail's steepness, which is another important aspect of difficulty.  Incorporating this information into the recommender would enhance the recommendations to provide trails with similar climbing / descending / steepness.
+3. It would also be interesting to compare the results of this content-based recommender to results from a collaborative recommender that recommends trails that other similar users have liked.  The API for mtbproject.com can also provide "user favorites" data -- a list of trails that a given user has "favorited".  With a sufficient number of users and user favorites, a collaborative recommendation system could be built.
+
