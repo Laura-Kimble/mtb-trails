@@ -61,7 +61,7 @@ Since I'm interested in the words in the descriptions, a general word cloud show
 </br>
 </br>
 
-<div style="text-align:center"><img src="images/co_wordcloud1.png" width="600"/></div>
+<div style="center"><img src="images/co_wordcloud1.png" width="600"/></div>
 
 </br>
 
