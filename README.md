@@ -61,7 +61,7 @@ Since I'm interested in the words in the descriptions, a general word cloud show
 </br>
 </br>
 
-<div style="text-align:center"><img src="images/co_wordcloud1.png" width="800"/></div>
+<div style="text-align:center"><img src="images/co_wordcloud1.png" width="600"/></div>
 
 </br>
 
@@ -99,7 +99,7 @@ These are the 10 topics that I used in the recommender. In this way, each trail 
 
 ## Trail Recommender
 
-Using the trail description topics above along with additional trail data such as length, difficutly, rating, etc., I built a content-based trail recommender.  Content-based means that the recommender finds trails most similar to a user-selected trail based on characteristics of the trail itself (vs. a collaborative recommender that assesses similarity based on what other users have liked).  I then built the recommender into a web app using Flask and a Bootstrap template, and temporarily hosted it on an AWS EC2 instance (no longer running due to cost constraints).  To use the recommender app, a user selects a trail or set of trails that they enjoy riding, optionally selects a maximum distance from Denver for their recommendations, and then receives a list of recommendations, i.e., trails that are most similar to their selections.
+Using the trail description topics above along with additional trail data such as length, difficutly, rating, etc., I built a content-based trail recommender.  Content-based means that the recommender finds trails most similar to a user-selected trail based on characteristics of the trail itself, vs. a collaborative recommender that assesses similarity based on what other users have liked.  I then built the recommender into a web app using Flask and a Bootstrap template, and temporarily hosted it on an AWS EC2 instance (no longer running due to cost constraints).  To use the recommender app, a user selects a trail or set of trails that they enjoy riding, optionally selects a maximum distance from Denver for their recommendations, and then receives a list of recommendations, i.e., trails that are most similar to their selections.
 
 <br>
 <p align="center"><img src="images/Process.png" width="1000"/></p>
@@ -116,22 +116,24 @@ I used the following trail attributes as my features for the recommender:
 - Lift Service? (Y/N)
 - Pump Track? (Y/N)
 
-I chose to use the length of the trail/ride and difficulty since these convey important aspects of what a rider may want in a trail, to find similar trails.  Average user star rating is a bit unintuitive -- no one wants to ride poorly rated trails -- but if we assume that people will usually select trails with higher ratings to get recommendations from, then using star rating in the recommender will then return other highly rated trails.
+I chose to use the length of the trail/ride and difficulty since these convey important aspects of what a rider may want in a trail, to find similar trails.  Average user star rating is a bit unintuitive -- no one wants to ride poorly rated trails -- but if we assume that people will usually select trails with higher ratings as their favorites, then using star rating in the recommender will return other highly rated trails.
 
-Distance from Denver is an optional filtering criteria in the app, but is also used in the recommender since trails in a given area are usually similar to one another, and you may want recommendations near where you already ride.  In future work however, distance from Denver could be omitted from the recommender features to give more geographically diverse recommendations.
+Distance from Denver is an optional filtering criteria in the app, but is also used in the recommender since trails in a given area are usually similar to one another, and a rider may want recommendations near where they already ride.  In future work however, distance from Denver could be omitted from the recommender features to give more geographically diverse recommendations.
 
 Lastly, in addition to Lift Service and Pump Track (Y/N), Singletracks.com provides information on additional trail "features" such as whether there is Night Riding, Parking Fee, Restrooms, etc.  However, the availability of restrooms or a parking fee doesn't tell you much about the trail itself or what it's like to ride it.  Having Lift Service or a Pump Track, on the other hand, does tell you a lot about the ride.  Lift service is only available at bike resorts like Vail or Keystone, and pump tracks are usually only found in bike parks like Valmont Bike Park or Ruby Hill Park.  So I chose to include these two features in my recommender and omit the others.
 
 I scaled all of the features for the recommender on a 0 to 1 scale.  Since the minimum of each feature was 0, and most were not normally distributed, I simply divided each value by the maximum of that feature rather than use a standard normalization.  The only exception to this was for Length of trail, where I used 30 miles as the maximum since the vast majority of trails are under 30 miles, but there are a few as long as 140 miles that would skew the rest of the data.
 
-Lastly, I looked at weighting the features in the recommender.  I considered the relative subjective importance of each feature in a recommender, and obtained input from colleagues.  Ultimately, it seemed that each feature had about equal importance, and seemed to be getting "good" recommendations using equal weights, so I kept equal weightings across all features.
+Lastly, I looked at weighting the features in the recommender.  I considered the relative subjective importance of each feature in a recommender, and obtained input from colleagues.  Ultimately, it seemed that each feature had about equal importance, and we seemed to be getting "good" recommendations using equal weights, so I kept equal weightings across all features.
 
 I used cosine similarity as my distance metric to compare trail vectors.  My recommender can take a single trail as a feature vector and return the top n most similar trails as recommendations, or it can take a set of multiple trails and sum their feature vectors to return the top n most similar trails to the set of trails.  This way, a rider can get novel recommendations similar to the overall characteristics of all of the trails they like to ride (which is analogous to a user profile).
 
 
 #### Developing a Web App
 
-For the final part of this project, I implemented my recommender in a web app using Flask and Bootstrap, and briefly deployed it on AWS EC2 (currently the app is only running locally on my machine).  I was able to share my trail recommender app with colleagues, and demo it at our capstone project showcase -- it was well received, and multiple people commented that they thought their recommendations were useful!  All of the files to run the web app, along with a Docker file and requirements.txt to build and a run a Docker container to run the app, can be found in the 'web_app' folder in this repo.
+For the final part of this project, I implemented my recommender in a web app using Flask and Bootstrap, and briefly deployed it on AWS EC2 (currently the app is only running locally on my machine).  I was able to share my trail recommender app with colleagues, and demo it at our capstone project showcase -- it was well received, and multiple people commented that they thought the recommendations were useful!  
+
+All of the files to run the web app, along with a Docker file and requirements.txt to build and a run a Docker container to run the app, can be found in the 'web_app' folder in this repo.
 
 The following screenshots from the web app show how the recommender works.
 
