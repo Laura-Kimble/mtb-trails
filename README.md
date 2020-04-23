@@ -151,7 +151,7 @@ Clicking on the "Show Me Where to Shred" button then displays a summary of your 
 <p align="center"><img src="images/reccos_ss_full.png" width="800"/></p>
 <br>
 
-Alternatively, you can choose multiple trails you enjoy, and get recommendations similar to a bunch of trails you like.
+Alternatively, you can choose multiple trails that you enjoy, and get recommendations similar to a bunch of trails you like.
 
 <p align="center"><img src="images/select_multi.png" width="800"/></p>
 <br>
@@ -170,4 +170,3 @@ There are several ways that the trail recommender could be enhanced, with the in
 1. Include trails in regions beyond Colorado, to include the rest of the U.S. (and perhaps internationally)
 2. Include additional trail data such as ascent/descent (vertical feet), which was not available through the Singletracks.com API.  This could be obtained either through webscraping the Singletracks.com website, and/or through the API of another popular mountain biking website, mtbproject.com, that provides this data.  The magnitude of a trail's ascent conveys how much climbing a rider has to do, and the descent is how much downhill a rider gets to enjoy, which are salient features in any ride.  Also, the ascent/descent compared to the total length of trail provides information on the trail's steepness, which is another important aspect of difficulty.  Incorporating this information into the recommender would enhance the recommendations to provide trails with similar climbing / descending / steepness.
 3. It would also be interesting to compare the results of this content-based recommender to results from a collaborative recommender that recommends trails that other similar users have liked.  The API for mtbproject.com can also provide "user favorites" data -- a list of trails that a given user has "favorited".  With a sufficient number of users and user favorites, a collaborative recommendation system could be built.
-
